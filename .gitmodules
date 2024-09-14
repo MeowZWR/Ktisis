@@ -1,6 +1,8 @@
 [submodule "ImGuizmo.NET"]
 	path = ImGuizmo.NET
-	url = git@github.com:ktisis-tools/ImGuizmo.NET.git
+	url = https://github.com/MeowZWR/ImGuizmo.NET.git
+	branch = trunk
 [submodule "GLib"]
 	path = GLib
-	url = git@github.com:ktisis-tools/GLib.git
+	url = https://github.com/MeowZWR/GLib.git
+	branch = main
