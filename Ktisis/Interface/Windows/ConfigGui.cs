@@ -83,7 +83,7 @@ namespace Ktisis.Interface.Windows {
 						DrawReferencesTab(cfg);
 					if (ImGui.BeginTabItem(Locale.GetString("Language")))
 						DrawLanguageTab(cfg);
-					if (ImGui.BeginTabItem("Data"))
+					if (ImGui.BeginTabItem("数据"))
 						DrawDataTab(cfg);
 
 					ImGui.EndTabBar();
@@ -156,18 +156,18 @@ namespace Ktisis.Interface.Windows {
 				cfg.TransformTableDisplayMultiplierInputs = displayMultiplierInputs;
 
 			var showToolbar = cfg.ShowToolbar;
-			if (ImGui.Checkbox("Show Experimental Toolbar", ref showToolbar))
+			if (ImGui.Checkbox("显示实验性工具栏", ref showToolbar))
 				cfg.ShowToolbar = showToolbar;
 
 			ImGui.Spacing();
 			ImGui.Separator();
-			ImGui.Text(Locale.GetString("UI Customization (Experimental)"));
+			ImGui.Text(Locale.GetString("用户界面自定义（实验性）"));
 
 			var customWidthMarginDebug = cfg.CustomWidthMarginDebug;
-			if (ImGui.DragFloat("Right margin (debug)", ref customWidthMarginDebug, 0.05f, -10, 50, "%.2f"))
+			if (ImGui.DragFloat("右边距（调试）", ref customWidthMarginDebug, 0.05f, -10, 50, "%.2f"))
 				cfg.CustomWidthMarginDebug = customWidthMarginDebug;
 			ImGui.SameLine();
-			ImGuiComponents.HelpMarker(Locale.GetString("Right margin for determining window content size (used for right-aligning and width-filling).\nIncrease this value if the UI stretches to the entire screen.\n\nNote: If this value is changed, reporting these info to Ktisis team would greatly help!\n - The edited Right margin value\n - The Dalamud theme preset in use"));
+			ImGuiComponents.HelpMarker(Locale.GetString("决定窗口大小的右边距尺寸（用来右对齐和宽度填充）。\n如果界面延伸至整个屏幕，请增加此值。\n\n注意：如果这个值被修改后，将以下信息提交给Ktisis团队，将对我们非常有帮助！\n - 编辑后的右边距值。\n - 使用的卫月主题。"));
 
 			ImGui.PopItemWidth();
 
@@ -180,7 +180,7 @@ namespace Ktisis.Interface.Windows {
 			ImGui.Spacing();
 
 			var order = cfg.OrderBoneListByDistance;
-			if (ImGui.Checkbox("Order bone list by distance from camera", ref order))
+			if (ImGui.Checkbox("按相对摄像机的距离排列骨骼列表", ref order))
 				cfg.OrderBoneListByDistance = order;
 
 			ImGui.Spacing();
@@ -333,8 +333,8 @@ namespace Ktisis.Interface.Windows {
 		// Language
 
 		public static void DrawLanguageTab(Configuration cfg) {
-			ImGui.Text("Disclaimer! These settings are currently only in place to test the WIP localization system.");
-			ImGui.Text("Translation strings are not currently supported in most of the UI.");
+			ImGui.Text("申明! 此设置仅用于测试开发中的本地化系统。");
+			ImGui.Text("翻译字符串并未涵盖用户界面中的所有位置。");
 
 			ImGui.Spacing();
 
@@ -368,7 +368,7 @@ namespace Ktisis.Interface.Windows {
 		// input selector
 		public static void DrawInputTab(Configuration cfg) {
 			ImGui.Spacing();
-			ImGui.Text("Selection Behavior");
+			ImGui.Text("鼠标选择特性");
 			ImGui.Spacing();
 
 			var disableChangeTargetOnLeftClick = cfg.DisableChangeTargetOnLeftClick;
@@ -405,10 +405,10 @@ namespace Ktisis.Interface.Windows {
 			}
 
 			ImGui.Text(Locale.GetString("Pressing_keys"));
-			ImGuiComponents.HelpMarker("To assign a key or key combination:\n" +
-				"1. Hold the key or key combination\n" +
-				"2. Click on the desired action\n\n" +
-				"Do not hold any key to unassign.");
+			ImGuiComponents.HelpMarker("分配按键或组合键：\n" +
+				"1. 按住按键或组合键\n" +
+				"2. 点击要绑定的操作的前一格\n\n" +
+				"不按住任何按键，点击鼠标左键来取消分配。");
 			ImGui.SameLine();
 			ImGui.Text($":   {PrettyKeys(pressDemo)}");
 			ImGui.Spacing();
@@ -422,8 +422,8 @@ namespace Ktisis.Interface.Windows {
 
 				// display and configureheaders
 				ImGui.TableSetupScrollFreeze(0, 1); // Make top row always visible
-				ImGui.TableSetupColumn("Keys");
-				ImGui.TableSetupColumn("Action");
+				ImGui.TableSetupColumn("按键");
+				ImGui.TableSetupColumn("操作");
 				ImGui.TableHeadersRow();
 
 				foreach (var purpose in Input.PurposesWithCategories) {
@@ -471,48 +471,48 @@ namespace Ktisis.Interface.Windows {
 		private static void DrawCameraTab(Configuration cfg) {
 			ImGui.Spacing();
 
-			ImGui.Text("Work camera controls");
+			ImGui.Text("工作摄像机控制");
 			ImGui.PushItemWidth(ImGui.GetFontSize() * 4);
 
 			var baseSpeed = cfg.FreecamMoveSpeed;
-			if (ImGui.DragFloat("Base move speed", ref baseSpeed, 0.001f, 0, 1))
+			if (ImGui.DragFloat("基础移动速度", ref baseSpeed, 0.001f, 0, 1))
 				cfg.FreecamMoveSpeed = baseSpeed;
 
 			var shiftMuli = cfg.FreecamShiftMuli;
-			if (ImGui.DragFloat("Fast speed multiplier", ref shiftMuli, 0.001f, 0, 10))
+			if (ImGui.DragFloat("快速移动倍速", ref shiftMuli, 0.001f, 0, 10))
 				cfg.FreecamShiftMuli = shiftMuli;
 
 			var ctrlMuli = cfg.FreecamCtrlMuli;
-			if (ImGui.DragFloat("Slow speed multiplier", ref ctrlMuli, 0.001f, 0, 10))
+			if (ImGui.DragFloat("慢速移动倍速", ref ctrlMuli, 0.001f, 0, 10))
 				cfg.FreecamCtrlMuli = ctrlMuli;
 
 			var upDownMuli = cfg.FreecamUpDownMuli;
-			if (ImGui.DragFloat("Up/down speed multiplier", ref upDownMuli, 0.001f, 0, 10))
+			if (ImGui.DragFloat("上下移动倍速", ref upDownMuli, 0.001f, 0, 10))
 				cfg.FreecamUpDownMuli = upDownMuli;
 
 			ImGui.Spacing();
 
 			var camSens = cfg.FreecamSensitivity;
-			if (ImGui.DragFloat("Camera sensitivity", ref camSens, 0.001f, 0, 8))
+			if (ImGui.DragFloat("摄像机灵敏度", ref camSens, 0.001f, 0, 8))
 				cfg.FreecamSensitivity = camSens;
 
 			ImGui.Spacing();
 
 			ImGui.PushItemWidth(ImGui.GetFontSize() * 8);
 
-			ImGui.Text("Work camera keybinds");
+			ImGui.Text("工作摄像机按键绑定");
 
-			KeybindEdit.Draw("Forward##WCForward", cfg.FreecamForward);
-			KeybindEdit.Draw("Left##WCLeft", cfg.FreecamLeft);
-			KeybindEdit.Draw("Back##WCBack", cfg.FreecamBack);
-			KeybindEdit.Draw("Right##WCRight", cfg.FreecamRight);
-			KeybindEdit.Draw("Up##WCUp", cfg.FreecamUp);
-			KeybindEdit.Draw("Down##WCDown", cfg.FreecamDown);
+			KeybindEdit.Draw("前进##WCForward", cfg.FreecamForward);
+			KeybindEdit.Draw("左移##WCLeft", cfg.FreecamLeft);
+			KeybindEdit.Draw("后退##WCBack", cfg.FreecamBack);
+			KeybindEdit.Draw("右移##WCRight", cfg.FreecamRight);
+			KeybindEdit.Draw("上移##WCUp", cfg.FreecamUp);
+			KeybindEdit.Draw("下移##WCDown", cfg.FreecamDown);
 
 			ImGui.Spacing();
 
-			KeybindEdit.Draw("Fast speed modifier##WCUp", cfg.FreecamFast);
-			KeybindEdit.Draw("Slow speed modifier##WCUp", cfg.FreecamSlow);
+			KeybindEdit.Draw("快速移动组合键##WCUp", cfg.FreecamFast);
+			KeybindEdit.Draw("慢速移动组合键##WCUp", cfg.FreecamSlow);
 
 			ImGui.PopItemWidth();
 
@@ -524,16 +524,16 @@ namespace Ktisis.Interface.Windows {
 		public static void DrawDataTab(Configuration cfg) {
 			ImGui.Spacing();
 			var validGlamPlatesFound = GlamourDresser.CountValid();
-			GuiHelpers.TextTooltip($"Glamour Plates in memory: {validGlamPlatesFound}  ", $"Found {validGlamPlatesFound} valid Glamour Plates");
+			GuiHelpers.TextTooltip($"投影模板记录： {validGlamPlatesFound}  ", $"找到 {validGlamPlatesFound} 个有效投影模板");
 			ImGui.SameLine();
 
-			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Sync, "Refresh Glamour Plate memory for the Sets lookups.\nThis memory is kept after a restart.\n\nRequirements:\n One of these windows must be opened: \"Glamour Plate Creation\" (by the Glamour Dresser) or \"Plate Selection\" (by the Glamour Plate skill)."))
+			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Sync, "刷新投影模板记录来查找投影套装。\n这个记录重启后会保留。\n\n要求：\n 要刷新必须打开其中一个窗口：\"投影模板创建\"(来自梳妆台)或\"投影模板选择\"(来自投影模板技能)。"))
 				GlamourDresser.PopulatePlatesData();
 
 			Components.Equipment.CreateGlamourQuestionPopup();
 
 			ImGui.SameLine();
-			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Trash, "Dispose of the Glamour Plates memory and remove configurations for ALL characters.")) {
+			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Trash, "处理投影模板记录，并清除所有角色的设置。")) {
 				Sets.Dispose();
 				cfg.GlamourPlateData = null;
 			}
@@ -548,7 +548,7 @@ namespace Ktisis.Interface.Windows {
 				var targetBodyType = CustomOffset.GetRaceGenderFromActor(Ktisis.Target);
 				var targetBoneOffset = CustomOffset.GetBoneOffset(bone);
 
-				ImGui.Text($"Edit {targetBodyType}'s {bone.LocaleName}  ");
+				ImGui.Text($"编辑 {targetBodyType} 的 {bone.LocaleName}  ");
 
 				if (!cfg.CustomBoneOffset.TryGetValue(targetBodyType, out var _))
 					cfg.CustomBoneOffset.Add(targetBodyType,new());
@@ -556,7 +556,7 @@ namespace Ktisis.Interface.Windows {
 				if (GuiHelpers.DragFloat3FillWidth($"##currentTargetOffset", false, null, ref targetBoneOffset, .00001f, "%.5f"))
 					cfg.CustomBoneOffset[targetBodyType][bone.HkaBone.Name.String!] = targetBoneOffset;
 			} else {
-				ImGuiComponents.HelpMarker("Select a Bone to start adjusting its position.");
+				ImGuiComponents.HelpMarker("选中一个骨骼来调整其位置。");
 			}
 
 			ImGui.Spacing();
@@ -564,28 +564,28 @@ namespace Ktisis.Interface.Windows {
 			foreach (var bt in cfg.CustomBoneOffset) {
 				var bodyType = bt.Key;
 				if (ImGui.CollapsingHeader($"{bodyType}")) {
-					if (GuiHelpers.IconButtonHoldConfirm(FontAwesomeIcon.Trash,$"Hold Ctrl and Shift to drop all {bodyType} bone offsets.", default, $"dropall##{bodyType}"))
+					if (GuiHelpers.IconButtonHoldConfirm(FontAwesomeIcon.Trash,$"按住Ctrl键和Shift键删除所有的 {bodyType} 骨骼偏移。", default, $"dropall##{bodyType}"))
 						cfg.CustomBoneOffset.Remove(bodyType);
 					ImGui.SameLine();
 					if (GuiHelpers.IconButton(FontAwesomeIcon.Clipboard, default, $"export##{bodyType}"))
 						ImGui.SetClipboardText(Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(cfg.CustomBoneOffset[bodyType]))));
 					ImGui.SameLine();
-					if (GuiHelpers.IconButtonHoldConfirm(FontAwesomeIcon.Paste, $"Hold Ctrl and Shift to paste and replace all {bodyType} bone offsets.", default, $"pasteReplaceAll##{bodyType}")) {
+					if (GuiHelpers.IconButtonHoldConfirm(FontAwesomeIcon.Paste, $"按住Ctrl键和Shift键粘贴和替换所有的 {bodyType} 骨骼偏移。", default, $"pasteReplaceAll##{bodyType}")) {
 						var parsedPasteAll = JsonConvert.DeserializeObject<Dictionary<string, Vector3>>(Encoding.UTF8.GetString(Convert.FromBase64String(ImGui.GetClipboardText())));
 						if (parsedPasteAll != null)
 							cfg.CustomBoneOffset[bodyType] = parsedPasteAll;
 					}
 
-					ImGuiComponents.HelpMarker("Tips:\n" +
-						"Click on a row to copy it into clipboard" +
-						"Ctrl + Shift + Right click to remove a row" +
-						"The plus (+) button will insert a copied row");
+					ImGuiComponents.HelpMarker("提示：\n" +
+                        "单击一行将其复制到剪贴板" +
+                        "Ctrl+Shift+右键单击可删除一行" +
+						"(+) 加号按钮可以插入复制的行");
 
 
 					if (ImGui.BeginTable("offsetBonesTable", 4, ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.BordersInnerH | ImGuiTableFlags.BordersInnerV | ImGuiTableFlags.PadOuterX)) {
 
 						ImGui.TableSetupScrollFreeze(0, 1); // Make top row always visible
-						ImGui.TableSetupColumn("Bone");
+						ImGui.TableSetupColumn("骨骼");
 						ImGui.TableSetupColumn("X");
 						ImGui.TableSetupColumn("Y");
 						ImGui.TableSetupColumn("Z");
@@ -611,14 +611,14 @@ namespace Ktisis.Interface.Windows {
 							ImGui.Text($"{offsets.Z:F6}");
 						}
 						ImGui.EndTable();
-						if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Plus,"Add a line from clipboard.", default, $"{bodyType}##Clipboard##AddLine")) {
+						if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Plus, "从剪贴板添加一行。", default, $"{bodyType}##Clipboard##AddLine")) {
 							var parsedPasteLine = JsonConvert.DeserializeObject<(string, Vector3)>(Encoding.UTF8.GetString(Convert.FromBase64String(ImGui.GetClipboardText()))) ;
 							cfg.CustomBoneOffset[bodyType][parsedPasteLine.Item1] = parsedPasteLine.Item2;
 						}
 					}
 				}
 			}
-			if (GuiHelpers.IconButtonHoldConfirm(FontAwesomeIcon.Trash, $"Hold Ctrl and Shift to drop ALL bone offsets.", default, "dropAllOffset"))
+			if (GuiHelpers.IconButtonHoldConfirm(FontAwesomeIcon.Trash, $"按住Ctrl键和Shift键删除所有的骨骼偏移。", default, "dropAllOffset"))
 				cfg.CustomBoneOffset = new();
 
 			ImGui.Spacing();

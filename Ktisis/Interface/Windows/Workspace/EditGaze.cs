@@ -50,7 +50,7 @@ namespace Ktisis.Interface.Windows.Workspace {
 				IsLinked = !IsLinked;
 			}
 			ImGui.SameLine();
-			ImGui.Text(IsLinked ? "Linked" : "Unlinked");
+			ImGui.Text(IsLinked ? "已链接" : "未链接");
 
 			ImGui.Spacing();
 

@@ -27,7 +27,7 @@ namespace Ktisis.Interface.Components {
 
 		public static void DrawExtra() {
 			var gizmode = Ktisis.Configuration.GizmoMode;
-			if (GuiHelpers.IconButtonTooltip(gizmode == MODE.WORLD ? FontAwesomeIcon.Globe : FontAwesomeIcon.Home, "Local / World orientation mode switch.", ButtonSize))
+			if (GuiHelpers.IconButtonTooltip(gizmode == MODE.WORLD ? FontAwesomeIcon.Globe : FontAwesomeIcon.Home, "本地/世界坐标模式切换。", ButtonSize))
 				Ktisis.Configuration.GizmoMode = gizmode == MODE.WORLD ? MODE.LOCAL : MODE.WORLD;
 
 			ImGui.SameLine();
@@ -36,7 +36,7 @@ namespace Ktisis.Interface.Components {
 			if (GuiHelpers.IconButton(showSkeleton ? FontAwesomeIcon.Eye : FontAwesomeIcon.EyeSlash, ButtonSize))
 				Skeleton.Toggle();
 			if (showSkeleton) ImGui.PopStyleColor();
-			GuiHelpers.Tooltip((showSkeleton ? "Hide" : "Show") + " skeleton lines and bones.");
+			GuiHelpers.Tooltip((showSkeleton ? "隐藏" : "显示") + "骨骼线和骨骼.");
 
 
 			ImGui.SameLine();
@@ -46,7 +46,7 @@ namespace Ktisis.Interface.Components {
 
 			var gizmoActive = OverlayWindow.IsGizmoVisible;
 			if (!gizmoActive) ImGui.BeginDisabled();
-			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.MinusCircle, "Deselect gizmo", ButtonSize))
+			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.MinusCircle, "取消选择骨骼", ButtonSize))
 				OverlayWindow.DeselectGizmo();
 			if (!gizmoActive) ImGui.EndDisabled();
 
@@ -56,14 +56,14 @@ namespace Ktisis.Interface.Components {
 			ImGui.SameLine();
 
 			if (!canUndo) ImGui.BeginDisabled();
-			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Backward, "Undo", ButtonSize)) 
+			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Backward, "撤销", ButtonSize)) 
 				HistoryManager.Undo();
 			if (!canUndo) ImGui.EndDisabled();
 
 			ImGui.SameLine();
 
 			if (!canRedo) ImGui.BeginDisabled();
-			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Forward, "Redo", ButtonSize))
+			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Forward, "重做", ButtonSize))
 				HistoryManager.Redo();
 			if (!canRedo) ImGui.EndDisabled();
 		}
@@ -85,7 +85,7 @@ namespace Ktisis.Interface.Components {
 			IsSettingsHovered = ImGui.IsItemHovered();
 			IsSettingsActive = ImGui.IsItemActive();
 
-			GuiHelpers.Tooltip("Information");
+			GuiHelpers.Tooltip("信息");
 		}
 		private static void DrawSettings() {
 			ImGui.PushStyleColor(ImGuiCol.Button, 0x00000000);
@@ -101,7 +101,7 @@ namespace Ktisis.Interface.Components {
 			IsSettingsHovered = ImGui.IsItemHovered();
 			IsSettingsActive = ImGui.IsItemActive();
 
-			GuiHelpers.Tooltip("Open Settings");
+			GuiHelpers.Tooltip("设置");
 		}
 		public static void PlaceAndRenderSettings() {
 
@@ -139,29 +139,29 @@ namespace Ktisis.Interface.Components {
 
 			string help = "";
 			if (isCurrentOperation)
-				help += "Current gizmo operation is ";
+				help += "当前坐标轴模式为 ";
 			else
-				help += "Change gizmo operation to ";
+				help += "更改坐标轴模式为 ";
 
 			help += operation switch {
-				OPERATION.TRANSLATE => "Position",
-				OPERATION.ROTATE => "Rotation",
-				OPERATION.SCALE => "Scale",
-				OPERATION.UNIVERSAL => "Universal",
+				OPERATION.TRANSLATE => "位置",
+				OPERATION.ROTATE => "旋转",
+				OPERATION.SCALE => "缩放",
+				OPERATION.UNIVERSAL => "全局",
 				var _ => throw new ArgumentOutOfRangeException(nameof(operation), operation, null)
 			};
 
-			GuiHelpers.Tooltip(help + ".");
+			GuiHelpers.Tooltip(help + "。");
 		}
 
 		// Independant from the others
 		public static void DrawPoseSwitch() {
-			ImGui.SetCursorPosX(ImGui.CalcTextSize("GPose Disabled").X + (ImGui.GetFontSize() * 8) + ImGui.GetStyle().ItemSpacing.X + GuiHelpers.CalcIconSize(FontAwesomeIcon.Cog).X); // Prevents text overlap
+			ImGui.SetCursorPosX(ImGui.CalcTextSize("集体动作已禁用").X + (ImGui.GetFontSize() * 8) + ImGui.GetStyle().ItemSpacing.X + GuiHelpers.CalcIconSize(FontAwesomeIcon.Cog).X); // Prevents text overlap
 
 			ImGui.BeginDisabled(!Ktisis.IsInGPose);
 			var pose = PoseHooks.PosingEnabled;
 			if (Ktisis.IsInGPose) ImGui.PushStyleColor(ImGuiCol.Text, pose ? Workspace.ColGreen : Workspace.ColRed);
-			var label = pose ? "Posing" : "Not Posing";
+			var label = pose ? "姿势模式已启用" : "姿势模式已禁用";
 			float toggleWidth = ImGui.GetFrameHeight() * 1.55f;
 			float offsetWidth = GuiHelpers.GetRightOffset(toggleWidth);
 			GuiHelpers.TextRight(label, offsetWidth);
@@ -180,10 +180,10 @@ namespace Ktisis.Interface.Components {
 		public static void DrawSimplePoseSwitch() {
 			var pose = PoseHooks.PosingEnabled;
 			if (!Ktisis.IsInGPose)
-				ImGuiComponents.DisabledToggleButton("Toggle Posing", false);
-			else if (GuiHelpers.ToggleButton("Toggle Posing", ref pose, pose ? Workspace.ColGreen : Workspace.ColRed))
+				ImGuiComponents.DisabledToggleButton("切换姿势", false);
+			else if (GuiHelpers.ToggleButton("切换姿势", ref pose, pose ? Workspace.ColGreen : Workspace.ColRed))
 				PoseHooks.TogglePosing();
-			GuiHelpers.Tooltip("Toggle Posing");
+			GuiHelpers.Tooltip("启用/禁用姿势模式");
 		}
 
 		public static void DrawSiblingLink() {
@@ -205,9 +205,9 @@ namespace Ktisis.Interface.Components {
 			};
 		private static string SiblingLinkToTooltip(SiblingLink siblingLink)
 			=> siblingLink switch {
-				SiblingLink.Rotation => "Link rotation",
-				SiblingLink.RotationMirrorX => "Mirror rotation",
-				_ => "No sibling link"
+				SiblingLink.Rotation => "链接旋转",
+				SiblingLink.RotationMirrorX => "镜像旋转",
+				_ => "无子节点"
 			};
 	}
 }

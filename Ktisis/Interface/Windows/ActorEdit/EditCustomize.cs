@@ -178,7 +178,7 @@ namespace Ktisis.Interface.Windows {
 			}
 
 			ImGui.SameLine();
-			ImGui.Text(isM ? "Masculine" : "Feminine");
+			ImGui.Text(isM ? "男性" : "女性");
 
 			// TODO: Use Race and Tribe data from Lumina.
 
@@ -187,7 +187,7 @@ namespace Ktisis.Interface.Windows {
 			// Race
 
 			var curRace = Locale.GetString($"{custom.Race}");
-			if (ImGui.BeginCombo("Race", curRace)) {
+			if (ImGui.BeginCombo("种族", curRace)) {
 				foreach (Race race in Enum.GetValues(typeof(Race))) {
 					var raceName = Locale.GetString($"{race}");
 					if (ImGui.Selectable(raceName, race == custom.Race)) {
@@ -207,7 +207,7 @@ namespace Ktisis.Interface.Windows {
 			// Tribe
 
 			var curTribe = Locale.GetString($"{custom.Tribe}");
-			if (ImGui.BeginCombo("Tribe", curTribe)) {
+			if (ImGui.BeginCombo("部族", curTribe)) {
 				for (int i = 0; i < 2; i++) {
 					var tribe = (Tribe)(custom.GetRaceTribeIndex() + i);
 					if (ImGui.Selectable(Locale.GetString($"{tribe}"), tribe == custom.Tribe)) {
@@ -268,21 +268,21 @@ namespace Ktisis.Interface.Windows {
 
 		public static void DrawCheckboxes(Customize custom) {
 			var highlights = custom.HasHighlights == 0x80;
-			if (ImGui.Checkbox("Highlights", ref highlights)) {
+			if (ImGui.Checkbox("挑染", ref highlights)) {
 				custom.HasHighlights ^= 0x80;
 				Apply(custom);
 			}
 
 			var flipPaint = ((uint)custom.Facepaint & 0x80) > 0;
 			ImGui.SameLine();
-			if (ImGui.Checkbox("Flip Facepaint", ref flipPaint)) {
+			if (ImGui.Checkbox("反转面妆", ref flipPaint)) {
 				custom.Facepaint ^= (FacialFeature)0x80;
 				Apply(custom);
 			}
 
 			var smallIris = (custom.EyeShape & 0x80) > 0;
 			ImGui.SameLine();
-			if (ImGui.Checkbox("Small Iris", ref smallIris)) {
+			if (ImGui.Checkbox("较小眼瞳", ref smallIris)) {
 				custom.EyeShape ^= 0x80;
 				Apply(custom);
 			}
@@ -290,7 +290,7 @@ namespace Ktisis.Interface.Windows {
 			if (custom.Race != Race.Hrothgar) {
 				var lipCol = (custom.LipStyle & 0x80) > 0;
 				ImGui.SameLine();
-				if (ImGui.Checkbox("Lip Color", ref lipCol)) {
+				if (ImGui.Checkbox("唇色", ref lipCol)) {
 					custom.LipStyle ^= 0x80;
 					Apply(custom);
 				}

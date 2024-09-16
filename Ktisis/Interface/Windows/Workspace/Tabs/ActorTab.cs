@@ -38,7 +38,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 					EditActor.Show();
 			}
 			ImGui.SameLine();
-			ImGui.Text("Edit actor's appearance");
+			ImGui.Text("编辑角色外观");
 
 			ImGui.Spacing();
 
@@ -49,15 +49,15 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			AnimationControls.Draw(target);
 
 			// Gaze control
-			if (ImGui.CollapsingHeader("Gaze Control")) {
+			if (ImGui.CollapsingHeader("视线控制")) {
 				if (PoseHooks.PosingEnabled)
-					ImGui.TextWrapped("Gaze controls are unavailable while posing.");
+					ImGui.TextWrapped("姿势模式启用时无法使用视线控制。");
 				else
 					EditGaze.Draw(actor);
 			}
 
 			// Import & Export
-			if (ImGui.CollapsingHeader("Import & Export"))
+			if (ImGui.CollapsingHeader("导入 & 导出"))
 				ImportExportChara(actor);
 
 			ImGui.EndTabItem();
@@ -69,18 +69,18 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			// Equipment
 
 			ImGui.BeginGroup();
-			ImGui.Text("Equipment");
+			ImGui.Text("装备");
 
 			var gear = mode.HasFlag(AnamCharaFile.SaveModes.EquipmentGear);
-			if (ImGui.Checkbox("Gear##ImportExportChara", ref gear))
+			if (ImGui.Checkbox("服装##ImportExportChara", ref gear))
 				mode ^= AnamCharaFile.SaveModes.EquipmentGear;
 
 			var accs = mode.HasFlag(AnamCharaFile.SaveModes.EquipmentAccessories);
-			if (ImGui.Checkbox("Accessories##ImportExportChara", ref accs))
+			if (ImGui.Checkbox("饰品##ImportExportChara", ref accs))
 				mode ^= AnamCharaFile.SaveModes.EquipmentAccessories;
 
 			var weps = mode.HasFlag(AnamCharaFile.SaveModes.EquipmentWeapons);
-			if (ImGui.Checkbox("Weapons##ImportExportChara", ref weps))
+			if (ImGui.Checkbox("武器##ImportExportChara", ref weps))
 				mode ^= AnamCharaFile.SaveModes.EquipmentWeapons;
 
 			ImGui.EndGroup();
@@ -89,18 +89,18 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 
 			ImGui.SameLine();
 			ImGui.BeginGroup();
-			ImGui.Text("Appearance");
+			ImGui.Text("外貌");
 
 			var body = mode.HasFlag(AnamCharaFile.SaveModes.AppearanceBody);
-			if (ImGui.Checkbox("Body##ImportExportChara", ref body))
+			if (ImGui.Checkbox("身型##ImportExportChara", ref body))
 				mode ^= AnamCharaFile.SaveModes.AppearanceBody;
 
 			var face = mode.HasFlag(AnamCharaFile.SaveModes.AppearanceFace);
-			if (ImGui.Checkbox("Face##ImportExportChara", ref face))
+			if (ImGui.Checkbox("脸型##ImportExportChara", ref face))
 				mode ^= AnamCharaFile.SaveModes.AppearanceFace;
 
 			var hair = mode.HasFlag(AnamCharaFile.SaveModes.AppearanceHair);
-			if (ImGui.Checkbox("Hair##ImportExportChara", ref hair))
+			if (ImGui.Checkbox("发型##ImportExportChara", ref hair))
 				mode ^= AnamCharaFile.SaveModes.AppearanceHair;
 
 			ImGui.EndGroup();
@@ -116,9 +116,9 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			var isUseless = mode == AnamCharaFile.SaveModes.None;
 			if (isUseless) ImGui.BeginDisabled();
 
-			if (ImGui.Button("Import##ImportExportChara")) {
+			if (ImGui.Button("导入##ImportExportChara")) {
 				KtisisGui.FileDialogManager.OpenFileDialog(
-					"Importing Character",
+					"导入角色",
 					"Anamnesis Chara (.chara){.chara}",
 					(success, path) => {
 						if (!success) return;
@@ -136,9 +136,9 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 
 			ImGui.SameLine();
 
-			if (ImGui.Button("Export##ImportExportChara")) {
+			if (ImGui.Button("导出##ImportExportChara")) {
 				KtisisGui.FileDialogManager.SaveFileDialog(
-					"Exporting Character",
+					"导出角色",
 					"Anamnesis Chara (.chara){.chara}",
 					"Untitled.chara",
 					".chara",
@@ -156,7 +156,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			}
 			
 			ImGui.Spacing();
-			if (ImGui.Button("Import NPC"))
+			if (ImGui.Button("导入NPC"))
 				_npcImport.Open();
 
 			if (IpcChecker.IsGlamourerActive()) {
@@ -166,15 +166,15 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 				
                 Buttons.IconButtonTooltip(
 					FontAwesomeIcon.ExclamationCircle,
-					"Glamourer heavily interferes with edits made by other tools.\n" +
-					"You may need to disable it for this to function correctly!"
+                    "Glamourer严重干扰了其他工具所做的编辑。\n" +
+                    "您可能需要禁用它才能正常工作！"
 				);
 			}
 
 			if (isUseless) ImGui.EndDisabled();
 
 			ImGui.Spacing();
-			if (ImGui.Button("Revert Changes"))
+			if (ImGui.Button("还原更改"))
 				ActorStateWatcher.RevertToOriginal(actor);
 			
 			_npcImport.Draw(mode);

@@ -37,7 +37,7 @@ namespace Ktisis.Data.Excel {
 			IsMetallic = parser.ReadColumn<bool>(4);
 
 			if (Name == "")
-				Name = "Undyed"; // TODO: translation
+				Name = "未染色"; // TODO: translation
 		}
 	}
 }

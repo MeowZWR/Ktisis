@@ -28,7 +28,7 @@ namespace Ktisis.Interface.Windows.Toolbar {
 			ImGui.SetNextWindowSizeConstraints(new Vector2(ImGui.GetFontSize() * 16, 1), new Vector2(50000, 50000));
 			ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 10));
 
-			if (ImGui.Begin("Advanced", ref Visible, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.AlwaysAutoResize)) {
+			if (ImGui.Begin("高级", ref Visible, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.AlwaysAutoResize)) {
 
 				var target = Ktisis.GPoseTarget;
 				var actor = (Actor*)target!.Address;
@@ -38,15 +38,15 @@ namespace Ktisis.Interface.Windows.Toolbar {
 					AnimationControls.Draw(target);
 
 					// Gaze Controls
-					if (ImGui.CollapsingHeader("Gaze Control")) {
+					if (ImGui.CollapsingHeader("视线控制")) {
 						if (PoseHooks.PosingEnabled)
-							ImGui.TextWrapped("Gaze controls are unavailable while posing.");
+							ImGui.TextWrapped("姿势模式已启用时无法使用视线控制。");
 						else
 							EditGaze.Draw(actor);
 					}
 					
 					// Advanced
-					if (ImGui.CollapsingHeader("Advanced (Debug)")) {
+					if (ImGui.CollapsingHeader("高级（调试）")) {
 						PoseTab.DrawAdvancedDebugOptions(actor);
 					}
 				}

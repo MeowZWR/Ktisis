@@ -14,6 +14,7 @@ namespace Ktisis.Localization {
 
 		public static List<UserLocale> Languages = new() {
 			UserLocale.English,
+			UserLocale.简体中文,
 			UserLocale.German
 		};
 
@@ -74,8 +75,7 @@ namespace Ktisis.Localization {
 		None = -1,
 		// these don't exist yet
 		English = 0,
-		French = 1,
-		German = 2,
-		Japanese = 3
+        简体中文 = 1,
+		German = 2
 	}
 }

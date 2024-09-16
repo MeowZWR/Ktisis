@@ -82,7 +82,7 @@ namespace Ktisis {
 			// Register command
 
 			Services.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand) {
-				HelpMessage = "/ktisis - Show the Ktisis interface."
+				HelpMessage = "/ktisis - œ‘ æKtisisΩÁ√Ê°£"
 			});
 
 			// Overlays & UI

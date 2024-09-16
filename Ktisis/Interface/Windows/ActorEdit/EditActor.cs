@@ -36,16 +36,16 @@ namespace Ktisis.Interface.Windows.ActorEdit {
 
 			// Create window
 
-			if (ImGui.Begin("Appearance", ref Visible, ImGuiWindowFlags.AlwaysAutoResize)) {
+			if (ImGui.Begin("角色外观", ref Visible, ImGuiWindowFlags.AlwaysAutoResize)) {
 				ImGui.BeginGroup();
 				ImGui.AlignTextToFramePadding();
 
-				if (ImGui.BeginTabBar("Settings")) {
-					if (ImGui.BeginTabItem("Customize"))
+				if (ImGui.BeginTabBar("设置")) {
+					if (ImGui.BeginTabItem("容貌"))
 						EditCustomize.Draw();
-					if (ImGui.BeginTabItem("Equipment"))
+					if (ImGui.BeginTabItem("装备"))
 						EditEquip.Draw();
-					if (ImGui.BeginTabItem("Advanced"))
+					if (ImGui.BeginTabItem("高级"))
 						AdvancedEdit();
 
 					ImGui.EndTabBar();
@@ -59,13 +59,13 @@ namespace Ktisis.Interface.Windows.ActorEdit {
 		public unsafe static void AdvancedEdit() {
             ImGui.Spacing();
 			var modelId = (int)Target->ModelId;
-			if (ImGui.InputInt("Model ID", ref modelId)) {
+			if (ImGui.InputInt("模型 ID", ref modelId)) {
 				Target->ModelId = (uint)modelId;
 				Target->Redraw();
 			}
 			
 			ImGui.Spacing();
-			ImGui.SliderFloat("Opacity", ref Target->Transparency, 0.0f, 1.0f);
+			ImGui.SliderFloat("不透明度", ref Target->Transparency, 0.0f, 1.0f);
 
 			if (Target->Model != null) {
 				if (!ActorWetnessOverride.Instance.WetnessOverrides.TryGetValue((IntPtr)Target, out var wetness))
@@ -74,11 +74,11 @@ namespace Ktisis.Interface.Windows.ActorEdit {
 				if (!ActorWetnessOverride.Instance.WetnessOverridesEnabled.TryGetValue((IntPtr)Target, out var enabled))
 					enabled = false;
 
-				ImGui.Checkbox("Wetness Override Enabled", ref enabled);
+				ImGui.Checkbox("启用湿度覆盖", ref enabled);
 
-				ImGui.SliderFloat("WeatherWetness", ref wetness.WeatherWetness, 0.0f, 1.0f);
-				ImGui.SliderFloat("SwimmingWetness", ref wetness.SwimmingWetness, 0.0f, 1.0f);
-				ImGui.SliderFloat("WetnessDepth", ref wetness.WetnessDepth, 0.0f, 3.0f);
+				ImGui.SliderFloat("天气湿度", ref wetness.WeatherWetness, 0.0f, 1.0f);
+				ImGui.SliderFloat("游泳湿度", ref wetness.SwimmingWetness, 0.0f, 1.0f);
+				ImGui.SliderFloat("湿度深度", ref wetness.WetnessDepth, 0.0f, 3.0f);
 
 				ActorWetnessOverride.Instance.WetnessOverrides[(IntPtr)Target] = wetness;
 				ActorWetnessOverride.Instance.WetnessOverridesEnabled[(IntPtr)Target] = enabled;

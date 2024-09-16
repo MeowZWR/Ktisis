@@ -24,7 +24,7 @@ namespace Ktisis.Interface.Windows.Toolbar {
 			ImGui.SetNextWindowSizeConstraints(new Vector2(ImGui.GetFontSize() * 16, 1), new Vector2(50000, 50000));
 			ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 10));
 
-			if (ImGui.Begin("Transform", ref Visible, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.AlwaysAutoResize)) {
+			if (ImGui.Begin("变换", ref Visible, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.AlwaysAutoResize)) {
 				var target = Ktisis.GPoseTarget;
 				var actor = (Actor*)target!.Address;
 

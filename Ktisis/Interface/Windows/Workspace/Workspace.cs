@@ -58,13 +58,13 @@ namespace Ktisis.Interface.Windows.Workspace {
 
 				ImGui.TextColored(
 					gposeOn ? ColGreen : ColRed,
-					gposeOn ? "GPose Enabled" : "GPose Disabled"
+					gposeOn ? "集体动作已启用" : "集体动作已禁用"
 				);
 
 				if (PoseHooks.AnamPosingEnabled) {
 					ImGui.TextColored(
 						ColYellow,
-						"Anamnesis Enabled"	
+						"Anamnesis已启用"	
 					);
 				}
 
@@ -88,13 +88,13 @@ namespace Ktisis.Interface.Windows.Workspace {
 				ImGui.Separator();
 
 				if (ImGui.BeginTabBar(Locale.GetString("Workspace"))) {
-					if (ImGui.BeginTabItem(Locale.GetString("Actor")))
+					if (ImGui.BeginTabItem(Locale.GetString("角色")))
 						ActorTab.Draw(target);
-					if (ImGui.BeginTabItem(Locale.GetString("Pose")))
+					if (ImGui.BeginTabItem(Locale.GetString("姿势")))
 						PoseTab.Draw(target);
-					if (ImGui.BeginTabItem(Locale.GetString("Camera")))
+					if (ImGui.BeginTabItem(Locale.GetString("相机")))
 						CameraTab.Draw();
-					if (ImGui.BeginTabItem("World"))
+					if (ImGui.BeginTabItem("世界"))
 						WorldTab.Draw();
 				}
 			}
@@ -128,7 +128,7 @@ namespace Ktisis.Interface.Windows.Workspace {
 					ImGui.Text($"{bone.LocaleName}");
 				} else {
 					ImGui.BeginDisabled();
-					ImGui.Text("No bone selected");
+					ImGui.Text("未选中骨骼");
 					ImGui.EndDisabled();
 				}
 
@@ -155,7 +155,7 @@ namespace Ktisis.Interface.Windows.Workspace {
 			ImGui.Dummy(new Vector2(size, size) / 2);
 
 			GuiHelpers.Icon(icon);
-			GuiHelpers.Tooltip(isGamePlaybackRunning ? "Game Animation is playing for this target." + (PoseHooks.PosingEnabled ? "\nPosing may reset periodically." : "") : "Game Animation is paused for this target." + (!PoseHooks.PosingEnabled ? "\nAnimation Control Can be used." : ""));
+			GuiHelpers.Tooltip(isGamePlaybackRunning ? "此目标正在播放游戏动作。" + (PoseHooks.PosingEnabled ? "\n动作可能会周期性重置。" : "") : "目标的游戏动作已暂停。" + (!PoseHooks.PosingEnabled ? "\n动画控制将无法使用。" : ""));
 
 			ImGui.EndGroup();
 

@@ -37,7 +37,7 @@ namespace Ktisis.Interface.Windows.Toolbar {
 
 			ImGui.SetNextWindowSize(size, ImGuiCond.FirstUseEver);
 
-			if (!ImGui.Begin("Toolbar", ref Visible, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.AlwaysAutoResize)) {
+			if (!ImGui.Begin("工具栏", ref Visible, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.AlwaysAutoResize)) {
 				ImGui.End();
 				return;
 			}
@@ -61,7 +61,7 @@ namespace Ktisis.Interface.Windows.Toolbar {
 				if (Vector2.Distance(mousePos, center) < ImGui.GetFontSize()/1.2) {
 					ImGui.BeginTooltip();
 					ImGui.PushTextWrapPos(ImGui.GetFontSize() * 35.0f);
-					ImGui.TextUnformatted("Anamnesis Enabled");
+					ImGui.TextUnformatted("Anamnesis 已启用");
 					ImGui.PopTextWrapPos();
 					ImGui.EndTooltip();
 				}
@@ -69,7 +69,7 @@ namespace Ktisis.Interface.Windows.Toolbar {
 			
 			ImGui.SameLine(0, ImGui.GetFontSize() * (PoseHooks.AnamPosingEnabled ? 2 : 1));
 			
-			if (GuiHelpers.IconButtonTooltip(IconsPool.UserEdit, "Edit current Actor"))
+			if (GuiHelpers.IconButtonTooltip(IconsPool.UserEdit, "编辑当前角色"))
 				if (EditActor.Visible) EditActor.Hide();
 				else EditActor.Show();
 
@@ -86,7 +86,7 @@ namespace Ktisis.Interface.Windows.Toolbar {
 			}
 			if (!gizmoActive) ImGui.EndDisabled();
 			ImGui.SameLine();
-			if (GuiHelpers.IconButtonTooltip(IconsPool.BoneList, "Bones Window"))
+			if (GuiHelpers.IconButtonTooltip(IconsPool.BoneList, "骨骼窗口"))
 				BonesWindow.Toggle();
 			
 			ImGui.SameLine();
@@ -95,7 +95,7 @@ namespace Ktisis.Interface.Windows.Toolbar {
 				ImGui.Text($"{bone.LocaleName}");
 			} else {
 				ImGui.BeginDisabled();
-				ImGui.Text("No bones selected");
+				ImGui.Text("未选中骨骼");
 				ImGui.EndDisabled();
 			}
 
@@ -111,22 +111,22 @@ namespace Ktisis.Interface.Windows.Toolbar {
 
 			var parent = cfg.EnableParenting;
 			ControlButtons.VerticalAlignTextOnButtonSize(0.9f);
-			if (ImGui.Checkbox("Parent", ref parent))
+			if (ImGui.Checkbox("父级", ref parent))
 				cfg.EnableParenting = parent;
 
 			ImGui.SameLine(0, ImGui.GetFontSize());
 			
-			if (GuiHelpers.IconButtonTooltip(IconsPool.Import, "Import and Export pose and appearance", ControlButtons.ButtonSize))
+			if (GuiHelpers.IconButtonTooltip(IconsPool.Import, "导入/导出姿势和外观", ControlButtons.ButtonSize))
 				ImportExportWindow.Toggle();
 			
 			ImGui.SameLine();
 			
-			if (GuiHelpers.IconButtonTooltip(IconsPool.More, "Advanced tools window", ControlButtons.ButtonSize))
+			if (GuiHelpers.IconButtonTooltip(IconsPool.More, "高级工具窗口", ControlButtons.ButtonSize))
 				AdvancedWindow.Toggle();
 
 			ImGui.SameLine();
 
-			if (GuiHelpers.IconButtonTooltip(IconsPool.Settings, "Ktisis main window", ControlButtons.ButtonSize))
+			if (GuiHelpers.IconButtonTooltip(IconsPool.Settings, "Ktisis 主窗口", ControlButtons.ButtonSize))
 				Workspace.Workspace.Toggle();
 			ImGui.End();
 		}
@@ -140,23 +140,23 @@ namespace Ktisis.Interface.Windows.Toolbar {
 			ControlButtons.ButtonChangeOperation(OPERATION.SCALE, IconsPool.Scale);
 			ImGui.SameLine();
 			ControlButtons.VerticalAlignTextOnButtonSize(0.9f);
-			if (GuiHelpers.IconButtonTooltip(IconsPool.DownMore, "Show transform table ")) {
+			if (GuiHelpers.IconButtonTooltip(IconsPool.DownMore, "显示变换控制器")) {
 				TransformWindow.Toggle();
 			}
 			ImGui.SameLine(0, ImGui.GetFontSize());
 			ControlButtons.VerticalAlignTextOnButtonSize(0.9f);
-			if (GuiHelpers.IconButtonTooltip(IconsPool.Undo, "Undo previous action")) {
+			if (GuiHelpers.IconButtonTooltip(IconsPool.Undo, "撤销上一步操作")) {
 				HistoryManager.Undo();
 			}
 			ImGui.SameLine();
 			ControlButtons.VerticalAlignTextOnButtonSize(0.9f);
-			if (GuiHelpers.IconButtonTooltip(IconsPool.Redo, "Redo previous action")) {
+			if (GuiHelpers.IconButtonTooltip(IconsPool.Redo, "重做上一步操作")) {
 				HistoryManager.Redo();
 			}
 			ImGui.SameLine(0, ImGui.GetFontSize());
 			// Extra Options
 			var gizmoMode = Ktisis.Configuration.GizmoMode;
-			if (GuiHelpers.IconButtonTooltip(gizmoMode == MODE.WORLD ? FontAwesomeIcon.Globe : FontAwesomeIcon.Home, "Local / World orientation mode switch.", ControlButtons.ButtonSize))
+			if (GuiHelpers.IconButtonTooltip(gizmoMode == MODE.WORLD ? FontAwesomeIcon.Globe : FontAwesomeIcon.Home, "本地/世界坐标模式切换。", ControlButtons.ButtonSize))
 				Ktisis.Configuration.GizmoMode = gizmoMode == MODE.WORLD ? MODE.LOCAL : MODE.WORLD;
 
 			ImGui.SameLine();
@@ -166,7 +166,7 @@ namespace Ktisis.Interface.Windows.Toolbar {
 			if (GuiHelpers.IconButton(showSkeleton ? FontAwesomeIcon.Eye : FontAwesomeIcon.EyeSlash, ControlButtons.ButtonSize))
 				Skeleton.Toggle();
 			if (showSkeleton) ImGui.PopStyleColor();
-			GuiHelpers.Tooltip((showSkeleton ? "Hide" : "Show") + " skeleton lines and bones.");
+			GuiHelpers.Tooltip((showSkeleton ? "隐藏" : "显示") + "骨格线和骨骼");
 
 			ImGui.SameLine();
 

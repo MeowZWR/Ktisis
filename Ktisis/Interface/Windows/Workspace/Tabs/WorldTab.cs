@@ -26,8 +26,8 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 
 		private static float LabelMargin = 0.0f;
 
-		private const string TimeLabel = "Time";
-		private const string WeatherLabel = "Weather";
+		private const string TimeLabel = "时间";
+		private const string WeatherLabel = "天气";
 
 		private static void CheckData() {
 			var territory = Services.ClientState.TerritoryType;
@@ -101,7 +101,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 				if (DrawWeatherSelect(env->ActiveWeather, out var clickedId))
 					env->ActiveWeather = (byte)clickedId;
 				if (disable)
-					ImGui.Text("Weather unavailable in this area.");
+					ImGui.Text("此区域不支持这个天气。");
 				ImGui.EndDisabled();
 			}
 			
@@ -114,7 +114,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			ImGui.Spacing();
 
 			var waterFrozen = EnvService.FreezeWater ?? false;
-			if (ImGui.Checkbox("Freeze Water", ref waterFrozen)) {
+			if (ImGui.Checkbox("冻结水体", ref waterFrozen)) {
 				EnvService.FreezeWater = waterFrozen;
 			}
 		}
@@ -134,7 +134,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 
 			ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - style.ItemInnerSpacing.X - LabelMargin);
 			ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, style.FramePadding with { Y = padding });
-			if (ImGui.BeginCombo(WeatherLabel, currentInfo != null ? "##" : "Unknown")) {
+			if (ImGui.BeginCombo(WeatherLabel, currentInfo != null ? "##" : "未知")) {
 				foreach (var weatherInfo in Weather) {
 					if (ImGui.Selectable($"##EnvWeather{weatherInfo.RowId}", weatherInfo.RowId == current, ImGuiSelectableFlags.DontClosePopups)) {
 						click = true;
@@ -191,7 +191,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			ImGui.SetCursorPosY(ImGui.GetCursorPosY() + innerSpace);
 		
 			ImGui.BeginGroup();
-			ImGui.Text("Sky Texture");
+			ImGui.Text("天空纹理");
 			var sky = (int)skyId;
 			ImGui.SetNextItemWidth(ImGui.CalcItemWidth() - (ImGui.GetCursorPosX() - ImGui.GetCursorStartPos().X) - LabelMargin);
 			var changed = ImGui.InputInt("##SkyId", ref sky);

@@ -27,7 +27,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			// Parenting
 
 			var parent = cfg.EnableParenting;
-			if (ImGui.Checkbox("Parenting", ref parent))
+			if (ImGui.Checkbox("父级", ref parent))
 				cfg.EnableParenting = parent;
 
 			if (actor->Model != null) {
@@ -37,30 +37,30 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 				ImGui.Spacing();
 
 				// Bone categories
-				if (ImGui.CollapsingHeader("Bone Categories")) {
+				if (ImGui.CollapsingHeader("骨骼类型")) {
 					if (!Categories.DrawToggleList(cfg)) {
-						ImGui.Text("No bone found.");
-						ImGui.Text("Show Skeleton (");
+						ImGui.Text("未找到骨骼");
+						ImGui.Text("点击 (");
 						ImGui.SameLine();
 						GuiHelpers.Icon(FontAwesomeIcon.EyeSlash);
 						ImGui.SameLine();
-						ImGui.Text(") to fill this.");
+						ImGui.Text(") 来显示骨骼");
 					}
 				}
 
 				// Bone tree
 				BoneTree.Draw(actor);
 			} else {
-				ImGui.Text("Target actor has no valid skeleton!");
+				ImGui.Text("目标没有有效的骨架！");
 				ImGui.Spacing();
 			}
 
 			// Import & Export
-			if (ImGui.CollapsingHeader("Import & Export"))
+			if (ImGui.CollapsingHeader("导入 & 导出"))
 				ImportExportPose(actor);
 
 			// Advanced
-			if (ImGui.CollapsingHeader("Advanced (Debug)")) {
+			if (ImGui.CollapsingHeader("高级（调试）")) {
 				DrawAdvancedDebugOptions(actor);
 			}
 
@@ -69,18 +69,18 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 		
 		public static unsafe void DrawAdvancedDebugOptions(Actor* actor) {
 			if (actor->Model != null) {
-				if (ImGui.Button("Reset Current Pose"))
+				if (ImGui.Button("重设当前姿势"))
 					actor->Model->SyncModelSpace();
-				if (ImGui.Button("Set to Reference Pose"))
+				if (ImGui.Button("设置为参考姿势"))
 					actor->Model->SyncModelSpace(true);
-				if (ImGui.Button("Store Pose"))
+				if (ImGui.Button("存储姿势"))
 					_TempPose.Store(actor->Model->Skeleton);
 				ImGui.SameLine();
-				if (ImGui.Button("Apply Pose"))
+				if (ImGui.Button("应用姿势"))
 					_TempPose.Apply(actor->Model->Skeleton);
 			}
 
-			if(ImGui.Button("Force Redraw"))
+			if(ImGui.Button("强制重绘"))
 				actor->Redraw();
 		}
 		
@@ -98,21 +98,21 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 		
 		public unsafe static void ImportExportPose(Actor* actor) {
 			ImGui.Spacing();
-			ImGui.Text("Transforms");
+			ImGui.Text("变换");
 
 			// Transforms
 
 			var trans = Ktisis.Configuration.PoseTransforms;
 
 			var rot = trans.HasFlag(PoseTransforms.Rotation);
-			if (ImGui.Checkbox("Rotation##ImportExportPose", ref rot))
+			if (ImGui.Checkbox("旋转##ImportExportPose", ref rot))
 				trans = trans.ToggleFlag(PoseTransforms.Rotation);
 
 			var pos = trans.HasFlag(PoseTransforms.Position);
 			var col = pos;
 			ImGui.SameLine();
 			if (col) ImGui.PushStyleColor(ImGuiCol.Text, 0xff00fbff);
-			if (ImGui.Checkbox("Position##ImportExportPose", ref pos))
+			if (ImGui.Checkbox("位置##ImportExportPose", ref pos))
 				trans = trans.ToggleFlag(PoseTransforms.Position);
 			if (col) ImGui.PopStyleColor();
 
@@ -120,44 +120,44 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			col = scale;
 			ImGui.SameLine();
 			if (col) ImGui.PushStyleColor(ImGuiCol.Text, 0xff00fbff);
-			if (ImGui.Checkbox("Scale##ImportExportPose", ref scale))
+			if (ImGui.Checkbox("缩放##ImportExportPose", ref scale))
 				trans = trans.ToggleFlag(PoseTransforms.Scale);
 			if (col) ImGui.PopStyleColor();
 
 			if (trans > PoseTransforms.Rotation) {
 				ImGui.TextColored(
 					Workspace.ColYellow,
-					"* Importing may have unexpected results."
-				);
+                    "* 导入可能产生意外结果。"
+                );
 			}
 
 			Ktisis.Configuration.PoseTransforms = trans;
 
 			ImGui.Spacing();
-			ImGui.Text("Modes");
+			ImGui.Text("模式");
 
 			// Modes
 
 			var modes = Ktisis.Configuration.PoseMode;
 
 			var body = modes.HasFlag(PoseMode.Body);
-			if (ImGui.Checkbox("Body##ImportExportPose", ref body))
+			if (ImGui.Checkbox("身体##ImportExportPose", ref body))
 				modes = modes.ToggleFlag(PoseMode.Body);
 
 			var face = modes.HasFlag(PoseMode.Face);
 			ImGui.SameLine();
-			if (ImGui.Checkbox("Expression##ImportExportPose", ref face))
+			if (ImGui.Checkbox("表情##ImportExportPose", ref face))
 				modes = modes.ToggleFlag(PoseMode.Face);
 			
 			var wep = modes.HasFlag(PoseMode.Weapons);
 			ImGui.SameLine();
-			if (ImGui.Checkbox("Weapons##ImportExportPose", ref wep))
+			if (ImGui.Checkbox("武器##ImportExportPose", ref wep))
 				modes = modes.ToggleFlag(PoseMode.Weapons);
 
 			var posWep = Ktisis.Configuration.PositionWeapons;
 			if (modes.HasFlag(PoseMode.Weapons)) {
 				ImGui.Spacing();
-				if (ImGui.Checkbox("Apply position to weapons##ApplyWepPos", ref posWep))
+				if (ImGui.Checkbox("将位置应用于武器##ApplyWepPos", ref posWep))
 					Ktisis.Configuration.PositionWeapons = posWep;
 			}
 
@@ -170,10 +170,10 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			var isUseless = trans == 0 || modes == 0;
 
 			if (isUseless) ImGui.BeginDisabled();
-			if (ImGui.Button("Import##ImportExportPose")) {
+			if (ImGui.Button("导入##ImportExportPose")) {
 				KtisisGui.FileDialogManager.OpenFileDialog(
-					"Importing Pose",
-					"Pose Files{.pose,.cmp}",
+					"导入姿势",
+					"姿势文件{.pose,.cmp}",
 					(success, path) => {
 						if (!success) return;
 
@@ -185,10 +185,10 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			}
 			if (isUseless) ImGui.EndDisabled();
 			ImGui.SameLine();
-			if (ImGui.Button("Export##ImportExportPose")) {
+			if (ImGui.Button("导出##ImportExportPose")) {
 				KtisisGui.FileDialogManager.SaveFileDialog(
-					"Exporting Pose",
-					"Pose Files (.pose){.pose}",
+					"导出姿势",
+					"姿势文件 (.pose){.pose}",
 					"Untitled.pose",
 					".pose",
 					(success, path) => {

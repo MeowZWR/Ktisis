@@ -155,7 +155,7 @@ namespace Ktisis.Interface.Windows.ActorEdit {
 			ImGui.SameLine();
 			ImGui.BeginGroup();
 			
-			var name = item.Item?.Name ?? (isEmpty ? "Empty" : "Unknown");
+			var name = item.Item?.Name ?? (isEmpty ? "留空" : "未知");
 			ImGui.Text(name);
 
 			ImGui.PushItemWidth(120);
@@ -256,17 +256,17 @@ namespace Ktisis.Interface.Windows.ActorEdit {
 
 			return GuiHelpers.IconButtonTooltip(
 				hidden ? FontAwesomeIcon.EyeSlash : FontAwesomeIcon.Eye,
-				"Toggle visibility",
+                "切换可见性",
 				new Vector2(width, 0),
 				id
 			);
 		}
 
 		public unsafe static void DrawControls() {
-			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Tshirt, "Look up for a set."))
+			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Tshirt, "查找套装。"))
 				OpenSetSelector();
 			ImGui.SameLine();
-			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.PaintRoller, "Dye them all."))
+			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.PaintRoller, "全部染色。"))
 				OpenSetDyePicker();
 
 			if (DrawSetSelection)
@@ -428,7 +428,7 @@ namespace Ktisis.Interface.Windows.ActorEdit {
 				$"Dye All##dye_all",
 				"",
 				$"##dye_all_search##dye_all_search",
-				"Search...", // searchbar hint
+				"搜索...", // searchbar hint
 				DyePickerWidth, // window width
 				12 // number of columns
 			);

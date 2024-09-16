@@ -117,14 +117,14 @@ namespace Ktisis.Util
 				var buttonCenter = (ImGui.GetWindowContentRegionMax().X - (understoodOnly? okSize.X : buttonSize)) / 2;
 
 				ImGui.SetCursorPosX(buttonCenter);
-				if (ImGui.Button(understoodOnly ? "Understood" : "OK", okSize)) {
+				if (ImGui.Button(understoodOnly ? "了解" : "好", okSize)) {
 					ImGui.CloseCurrentPopup();
 					onAccept?.Invoke();
 				}
 				if (!understoodOnly) {
 					ImGui.SetItemDefaultFocus();
 					ImGui.SameLine();
-					if (ImGui.Button("Cancel", cancelSize))
+					if (ImGui.Button("取消", cancelSize))
 						ImGui.CloseCurrentPopup();
 				}
 

@@ -42,6 +42,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Locale\i18n\German.json" />
     <EmbeddedResource Include="Locale\i18n\English.json" />
+    <EmbeddedResource Include="Locale\i18n\简体中文.json" />
   </ItemGroup>
 
   <ItemGroup>

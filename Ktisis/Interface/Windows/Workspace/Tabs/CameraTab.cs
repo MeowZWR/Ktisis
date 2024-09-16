@@ -114,7 +114,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 						if (!canDelete) goto next;
 						
 						ImGui.SameLine(inputWidth + padding + 5);
-						if (GuiHelpers.IconButtonHoldCtrlConfirm(FontAwesomeIcon.Trash, "Delete (Hold Ctrl)")) {
+						if (GuiHelpers.IconButtonHoldCtrlConfirm(FontAwesomeIcon.Trash, "删除（按住Ctrl）")) {
 							CameraService.RemoveCamera(cam);
 							EditingId = null;
 							break;
@@ -139,7 +139,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			}
 
 			ImGui.SameLine(ImGui.GetCursorPosX() + comboWidth + 5);
-			var createNew = GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Plus, "Create new camera");
+			var createNew = GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Plus, "新建摄像机");
 			if (createNew) {
 				Services.Framework.RunOnFrameworkThread(() => {
 					var camera = CameraService.SpawnCamera();
@@ -156,7 +156,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			ImGui.EndDisabled();
 
 			ImGui.SameLine();
-			var toggleFree = GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Camera, "Toggle work camera");
+			var toggleFree = GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Camera, "开关工作摄像机");
 			if (toggleFree)
 				CameraService.ToggleFreecam();
 		}
@@ -176,7 +176,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			ImGui.BeginDisabled(isFreecam);
 			
 			var icon = isTarLocked ? FontAwesomeIcon.Lock : FontAwesomeIcon.Unlock;
-			var tooltip = isTarLocked ? "Unlock orbit target" : "Lock orbit target";
+			var tooltip = isTarLocked ? "解锁轨道环绕对象" : "锁定轨道环绕对象";
 			if (GuiHelpers.IconButtonTooltip(icon, tooltip, default, "CamOrbitLock")) {
 				ushort? newVal = isTarLocked ? null : target->GameObject.ObjectIndex;
 				RecordEditImmediate(CameraEvent.EditValue, "Orbit", newVal);
@@ -185,7 +185,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 
 			ImGui.SameLine();
 			
-			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Sync, "Move camera to target model")) {
+			if (GuiHelpers.IconButtonTooltip(FontAwesomeIcon.Sync, "移动摄像机到目标模型")) {
 				var camTar = (Actor*)CameraService.GetTargetLock(camera.Address)?.Address;
 				var goPos = camTar != null ? camTar->GameObject.Position : target->GameObject.Position;
 				if (target->Model != null) {
@@ -198,7 +198,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 
 			ImGui.SameLine();
 			ImGui.BeginDisabled(!isTarLocked);
-			ImGui.Text(!isFreecam ? $"Orbiting: {target->GetNameOrId()}" : "Work camera enabled.");
+			ImGui.Text(!isFreecam ? $"轨道环绕：{target->GetNameOrId()}" : "工作相机已启用。");
 			ImGui.EndDisabled();
 			
 			ImGui.EndDisabled();
@@ -223,7 +223,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 
 			ImGui.BeginDisabled(isFreecam);
 			var lockIcon = isLocked ? FontAwesomeIcon.Lock : FontAwesomeIcon.Unlock;
-			var lockTooltip = isLocked ? "Unlock camera position" : "Lock camera position";
+			var lockTooltip = isLocked ? "解锁摄像机位置" : "锁定摄像机位置";
 			if (GuiHelpers.IconButtonTooltip(lockIcon, lockTooltip, default, "CamPosLock")) {
 				Vector3? newVal = isLocked ? null : pos - offset;
 				RecordEditImmediate(CameraEvent.EditValue, "Position", newVal);
@@ -252,7 +252,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			
 			ImGui.Dummy(default);
 			ImGui.SameLine();
-			GuiHelpers.IconTooltip(FontAwesomeIcon.Plus, "Offset from base position");
+			GuiHelpers.IconTooltip(FontAwesomeIcon.Plus, "基础位置偏移");
 			ImGui.SameLine();
 			ImGui.SetCursorPosX(posCursor);
 			if (Transform.ColoredDragFloat3("##CamOffset", ref offset, 0.005f))
@@ -264,7 +264,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			ImGui.Spacing();
 			ImGui.Spacing();
 			
-			PrepareIconTooltip(FontAwesomeIcon.ArrowsSpin, "Camera orbit angle", posCursor);
+			PrepareIconTooltip(FontAwesomeIcon.ArrowsSpin, "摄像机环绕轨道角度", posCursor);
 			var angle = gposeCam->Angle * MathHelpers.Rad2Deg;
 			if (Transform.DragFloat2("CameraAngle", ref angle, Ktisis.Configuration.TransformTableBaseSpeedRot))
 				gposeCam->Angle = angle * MathHelpers.Deg2Rad;
@@ -274,7 +274,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 
 			ImGui.Spacing();
 			
-			PrepareIconTooltip(FontAwesomeIcon.ArrowsAlt, "Camera pan", posCursor);
+			PrepareIconTooltip(FontAwesomeIcon.ArrowsAlt, "摄像机摇摄角度", posCursor);
 			var pan = gposeCam->Pan * MathHelpers.Rad2Deg;
 			if (Transform.DragFloat2("CameraPan", ref pan, Ktisis.Configuration.TransformTableBaseSpeedRot))
 				gposeCam->Pan = pan * MathHelpers.Deg2Rad;
@@ -288,21 +288,21 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			ImGui.Spacing();
 
 			ImGui.BeginDisabled(isFreecam);
-			PrepareIconTooltip(FontAwesomeIcon.CameraRotate, "Camera rotation", posCursor);
+			PrepareIconTooltip(FontAwesomeIcon.CameraRotate, "摄像机旋转角度", posCursor);
 			ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
 			var initRot = gposeCam->Rotation * 1f;
 			ImGui.SliderAngle("##CamRotato", ref gposeCam->Rotation, -180, 180, "%.3f", ImGuiSliderFlags.AlwaysClamp);
 			RecordEdit(CameraEvent.CameraValue, "Rotation", false, initRot);
 			ImGui.EndDisabled();
 
-			PrepareIconTooltip(FontAwesomeIcon.VectorSquare, "Field of View", posCursor);
+			PrepareIconTooltip(FontAwesomeIcon.VectorSquare, "视场角", posCursor);
 			ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
 			var initFov = gposeCam->FoV * 1f;
 			ImGui.SliderAngle("##CamFoV", ref gposeCam->FoV, -40, 100, "%.3f", ImGuiSliderFlags.AlwaysClamp);
 			RecordEdit(CameraEvent.CameraValue, "FoV", false, initFov);
 
 			ImGui.BeginDisabled(isLocked);
-			PrepareIconTooltip(FontAwesomeIcon.Moon, "Camera distance", posCursor);
+			PrepareIconTooltip(FontAwesomeIcon.Moon, "摄像机距离", posCursor);
 			ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
 			var initDist = gposeCam->Distance * 1f;
 			ImGui.SliderFloat("##CamDist", ref gposeCam->Distance, 0, gposeCam->DistanceMax);
@@ -315,7 +315,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 			ImGui.BeginDisabled(isFreecam);
 
 			var delimit = gposeCam->DistanceMax > 20;
-			if (ImGui.Checkbox("Delimit camera", ref delimit)) {
+			if (ImGui.Checkbox("摄像机距离解限", ref delimit)) {
 				var max = delimit ? 350 : 20;
 				gposeCam->DistanceMax = max;
 				gposeCam->DistanceMin = delimit ? 0 : 1.5f;
@@ -326,7 +326,7 @@ namespace Ktisis.Interface.Windows.Workspace.Tabs {
 
 			ImGui.SameLine();
 			
-			ImGui.Checkbox("Disable collision", ref camera.CameraEdit.NoClip);
+			ImGui.Checkbox("禁用摄像机碰撞", ref camera.CameraEdit.NoClip);
 			
 			ImGui.EndDisabled();
 		}

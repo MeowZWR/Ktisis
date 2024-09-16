@@ -14,7 +14,7 @@ namespace Ktisis.Interface.Components {
 		private static Vector2 _FrameMax;
 
 		public static unsafe void Draw(Actor* actor) {
-			if (ImGui.CollapsingHeader("Bone List")) {
+			if (ImGui.CollapsingHeader("骨骼列表")) {
 				var lineHeight = ImGui.GetTextLineHeight();
 				if (ImGui.BeginChildFrame(471, new Vector2(-1, lineHeight * 12), ImGuiWindowFlags.HorizontalScrollbar)) {
 					if (actor == null || actor->Model == null || actor->Model->Skeleton == null)
