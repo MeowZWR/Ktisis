@@ -5,12 +5,12 @@ concurrency:
       group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
       cancel-in-progress: true
 
-# Only run CI against the main branch or on PRs to the main branch.
+# Only run CI against the cn branch or on PRs to the cn branch.
 on:
   push:
-    branches: [main]
+    branches: [cn]
   pull_request:
-    branches: [main]
+    branches: [cn]
     types: [ready_for_review, opened, synchronize]
   workflow_dispatch:
 
@@ -58,7 +58,7 @@ jobs:
         run: dotnet build -c Release --no-restore --nologo
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Build Artifacts
           path: Ktisis/bin/
