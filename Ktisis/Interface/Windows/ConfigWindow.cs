@@ -94,6 +94,8 @@ public class ConfigWindow : KtisisWindow {
 		this.DrawHint("config.categories.hint_nsfw");
 		refresh |= ImGui.Checkbox(this.Locale.Translate("config.categories.show_all_viera_ears"), ref this.Config.Categories.ShowAllVieraEars);
 		this.DrawHint("config.categories.hint_viera_ears");
+		ImGui.Checkbox(this.Locale.Translate("config.categories.show_friendly_bone_names"), ref this.Config.Categories.ShowFriendlyBoneNames);
+		this.DrawHint("config.categories.hint_friendly_bones");
 		if (refresh) this.RefreshScene();
 		
 		ImGui.Spacing();
@@ -151,6 +153,7 @@ public class ConfigWindow : KtisisWindow {
 		var cfg = this.Config.AutoSave;
 
 		ImGui.Checkbox(this.Locale.Translate("config.autosave.enable"), ref cfg.Enabled);
+		ImGui.Checkbox(this.Locale.Translate("config.autosave.disconnect"), ref cfg.OnDisconnect);
 		ImGui.Checkbox(this.Locale.Translate("config.autosave.clear"), ref cfg.ClearOnExit);
 		
 		ImGui.Spacing();

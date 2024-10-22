@@ -9,8 +9,8 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Graphics.Render;
 using FFXIVClientStructs.FFXIV.Client.Graphics.Scene;
 
+using Ktisis.Actions.Types;
 using Ktisis.Common.Extensions;
-using Ktisis.Common.Utility;
 using Ktisis.Data.Files;
 using Ktisis.Editor.Context.Types;
 using Ktisis.Editor.Posing.Attachment;
@@ -20,7 +20,6 @@ using Ktisis.Editor.Posing.Ik;
 using Ktisis.Editor.Posing.Types;
 using Ktisis.Interop.Hooking;
 using Ktisis.Scene.Entities.Skeleton;
-using Ktisis.Structs.Characters;
 
 namespace Ktisis.Editor.Posing;
 
@@ -76,12 +75,19 @@ public class PosingManager : IPosingManager {
 
 	private unsafe void Subscribe() {
 		this.PoseModule!.OnSkeletonInit += this.OnSkeletonInit;
+		this.PoseModule!.OnDisconnect += this.OnDisconnect;
 		this._context.Characters.OnDisableDraw += this.OnDisableDraw;
 		this._context.Plugin.Config.OnSaved += this.AutoSave.Configure;
 	}
 
 	private unsafe void OnSkeletonInit(IGameObject gameObject, Skeleton* skeleton, ushort partialId) {
 		this.RestorePoseFor(gameObject.ObjectIndex, skeleton, partialId);
+	}
+
+	private void OnDisconnect() {
+		if (!this._context.Config.AutoSave.OnDisconnect) return;
+		Ktisis.Log.Verbose("Disconnected, triggering pose save.");
+		this.AutoSave.Save();
 	}
 
 	private unsafe void OnDisableDraw(IGameObject gameObject, DrawObject* drawObject) {
@@ -110,24 +116,19 @@ public class PosingManager : IPosingManager {
 	private readonly Dictionary<ushort, PoseState> _savedPoses = new();
 
 	private unsafe void PreservePoseFor(ushort objectIndex, Skeleton* skeleton) {
-		var trans = skeleton->Owner != null ? ((CharacterBaseEx*)skeleton->Owner)->Transform : skeleton->Transform;
 		var pose = new PoseContainer();
 		pose.Store(skeleton);
 		this._savedPoses[objectIndex] = new PoseState {
-			Pose = pose,
-			Transform = new Transform(trans)
+			Pose = pose
 		};
 	}
 
 	private unsafe void RestorePoseFor(ushort objectIndex, Skeleton* skeleton, ushort partialId) {
 		if (!this._savedPoses.TryGetValue(objectIndex, out var state)) return;
 		state.Pose.ApplyToPartial(skeleton, partialId, PoseTransforms.Rotation | PoseTransforms.PositionRoot);
-		if (partialId == 0 && skeleton->Owner != null)
-			((CharacterBaseEx*)skeleton->Owner)->Transform = state.Transform;
 	}
 
 	private record PoseState {
-		public required Transform Transform;
 		public required PoseContainer Pose;
 	}
 	
@@ -140,6 +141,7 @@ public class PosingManager : IPosingManager {
 			converter.LoadReferencePose();
 			var final = converter.Save();
 			this._context.Actions.History.Add(new PoseMemento(converter) {
+				Modes = PoseMode.All,
 				Transforms = PoseTransforms.Position | PoseTransforms.Rotation,
 				Bones = null,
 				Initial = initial,
@@ -151,26 +153,46 @@ public class PosingManager : IPosingManager {
 	public Task ApplyPoseFile(
 		EntityPose pose,
 		PoseFile file,
+		PoseMode modes = PoseMode.All,
 		PoseTransforms transforms = PoseTransforms.Rotation,
-		bool selectedBones = false
+		bool selectedBones = false,
+		bool anchorGroups = false
 	) {
 		return this._framework.RunOnFrameworkThread(() => {
 			if (file.Bones == null) return;
 			
 			var converter = new EntityPoseConverter(pose);
 			var initial = converter.Save();
-			
+
+			var mementos = new List<IMemento>();
+
 			if (selectedBones)
 				converter.LoadSelectedBones(file.Bones, transforms);
 			else
-				converter.Load(file.Bones, transforms);
-			
-			this._context.Actions.History.Add(new PoseMemento(converter) {
+				converter.Load(file.Bones, modes, transforms);
+
+			mementos.Add(new PoseMemento(converter) {
+				Modes = modes,
 				Transforms = transforms,
 				Bones = selectedBones ? converter.GetSelectedBones().ToList() : null,
 				Initial = selectedBones ? converter.FilterSelectedBones(initial) : initial,
 				Final = selectedBones ? converter.FilterSelectedBones(file.Bones) : file.Bones
 			});
+
+			if (selectedBones && anchorGroups && transforms.HasFlag(PoseTransforms.Position)) {
+				var restored = converter.GetSelectedBones(false).ToList();
+				converter.LoadBones(initial, restored, PoseTransforms.Position);
+
+				mementos.Add(new PoseMemento(converter) {
+					Modes = modes,
+					Transforms = PoseTransforms.Position,
+					Bones = restored,
+					Initial = converter.FilterSelectedBones(file.Bones, false),
+					Final = converter.FilterSelectedBones(initial, false)
+				});
+			}
+
+			this._context.Actions.History.Add(new MultipleMemento(mementos));
 		});
 	}
 

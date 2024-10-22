@@ -31,7 +31,7 @@ public class ContextBuilder {
 	private readonly IKeyState _keyState;
 	private readonly NamingService _naming;
 	private readonly FormatService _format;
-	
+
 	public ContextBuilder(
 		GPoseService gpose,
 		InteropService interop,

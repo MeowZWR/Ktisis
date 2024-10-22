@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 using GLib.Popups.ImFileDialog;
@@ -19,6 +20,8 @@ using Ktisis.Scene.Entities.Game;
 using Ktisis.Scene.Entities.Skeleton;
 using Ktisis.Scene.Entities.World;
 using Ktisis.Scene.Modules;
+using Ktisis.Scene.Modules.Actors;
+using Ktisis.Services.Game;
 
 namespace Ktisis.Interface.Editor;
 
@@ -87,8 +90,12 @@ public class EditorInterface : IEditorInterface {
 
 	public void OpenAssignCollection(ActorEntity entity) => this._gui.CreatePopup<ActorCollectionPopup>(this._ctx, entity).Open();
 
+	public void OpenAssignCProfile(ActorEntity entity) => this._gui.CreatePopup<ActorCProfilePopup>(this._ctx, entity).Open();
+
 	public void OpenOverworldActorList() => this._gui.CreatePopup<OverworldActorPopup>(this._ctx).Open();
 	
+	public void RefreshGposeActors() => this._ctx.Scene.GetModule<ActorModule>().RefreshGPoseActors();
+
 	// Entity windows
 	
 	public void OpenRenameEntity(SceneEntity entity) => this._gui.CreatePopup<EntityRenameModal>(entity).Open();
