@@ -8,8 +8,8 @@
 		"TestingAssemblyVersion": "0.2.270",
 		"RepoUrl": "https://github.com/MeowZWR/Ktisis",
 		"ApplicableVersion": "any",
-		"DalamudApiLevel": 10,
-		"TestingDalamudApiLevel": 10,
+		"DalamudApiLevel": 11,
+		"TestingDalamudApiLevel": 11,
 		"Tags": [
 			"gpose",
 			"posing",
