@@ -30,10 +30,10 @@ namespace Ktisis.Structs.Actor {
 
 		[FieldOffset(0x370)] public nint Sklb;
 
-		[FieldOffset(0x9D0)] public Customize Customize;
+		[FieldOffset(0xA10)] public Customize Customize;
 
-		[FieldOffset(0x9D8)] public unsafe fixed ulong DemiEquip[5];
-		[FieldOffset(0x9F0)] public unsafe fixed ulong HumanEquip[11];
+		[FieldOffset(0xA18)] public unsafe fixed ulong DemiEquip[5];
+		[FieldOffset(0xA30)] public unsafe fixed ulong HumanEquip[11];
 		
 		[FieldOffset(0x2E0)] public float WeatherWetness;  // Set to 1.0f when raining and not covered or umbrella'd
 		[FieldOffset(0x2E4)] public float SwimmingWetness; // Set to 1.0f when in water
