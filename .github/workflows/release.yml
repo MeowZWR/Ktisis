@@ -78,7 +78,7 @@ jobs:
           cd ../
 
           release_version=$(echo ${{ github.ref_name }} | sed 's/^v//')
-          repo_url=$(echo ${{ github.server_url }}/${{ github.repository }} | sed 's/#/\\#/g')
+          repo_url=$(echo "https://meowrs.com/$(echo ${{ github.server_url }}/${{ github.repository }} | sed 's/#/\\#/g')")
 
           sed -i repo.json -E \
               -e 's#"AssemblyVersion": "([0-9]*\.){2,3}[0-9]*"#"AssemblyVersion": "'"$release_version"'"#g' \
