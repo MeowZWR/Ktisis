@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 
 using Dalamud.Plugin;
 using Dalamud.Game.Command;
@@ -82,7 +82,7 @@ namespace Ktisis {
 			// Register command
 
 			Services.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand) {
-				HelpMessage = "/ktisis - ÏÔÊ¾Ktisis½çÃæ¡£"
+				HelpMessage = "/ktisis - æ˜¾ç¤ºKtisisç•Œé¢ã€‚"
 			});
 
 			// Overlays & UI
