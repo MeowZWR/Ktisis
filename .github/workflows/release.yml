@@ -78,7 +78,7 @@ jobs:
         run: |
           cd ../
 
-          release_version=$(echo ${{ github.ref_name }} | sed 's/-cn$//)
+          release_version=$(echo ${{ github.ref_name }} | sed 's/-cn$//')
           repo_url=$(echo "https://meowrs.com/$(echo ${{ github.server_url }}/${{ github.repository }} | sed 's/#/\\#/g')")
 
           sed -i repo.json -E \
