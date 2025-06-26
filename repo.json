@@ -9,7 +9,7 @@
 		"RepoUrl": "https://github.com/MeowZWR/Ktisis",
 		"ApplicableVersion": "any",
 		"DalamudApiLevel": 12,
-		"TestingDalamudApiLevel": 12,
+		"TestingDalamudApiLevel": 11,
 		"Tags": [
 			"gpose",
 			"posing",
