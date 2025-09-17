@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using Dalamud.Plugin.Services;
 
 using Ktisis.Core.Attributes;
 
-using Lumina.Excel.GeneratedSheets2;
+using Lumina.Excel.Sheets;
 
 namespace Ktisis.Services.Data;
 
@@ -53,20 +54,26 @@ public class FormatService {
 	};
 
 	private string GetPlayerName() {
-		return this._client.LocalPlayer?.Name.ToString() ?? "Unknown";
+		return this.StripInvalidChars(this._client.LocalPlayer?.Name.ToString() ?? "Unknown");
 	}
 
 	private string GetCurrentWorld() {
-		return this._client.LocalPlayer?.CurrentWorld.GameData?.Name.ToString() ?? "Unknown";
+		return this.StripInvalidChars(this._client.LocalPlayer?.CurrentWorld.Value.Name.ToString() ?? "Unknown");
 	}
 	
 	private string GetHomeWorld() {
-		return this._client.LocalPlayer?.HomeWorld.GameData?.Name.ToString() ?? "Unknown";
+		return this.StripInvalidChars(this._client.LocalPlayer?.HomeWorld.Value.Name.ToString() ?? "Unknown");
 	}
 
 	private string GetZone() {
-		return this._data.GetExcelSheet<TerritoryType>()?
-			.GetRow(this._client.TerritoryType)?.PlaceName.Value?.Name
-			.ToString() ?? "Unknown";
+		var rowId = this._client.TerritoryType;
+		var sheet = this._data.GetExcelSheet<TerritoryType>();
+		if (sheet.HasRow(rowId) && sheet.GetRow(rowId).PlaceName is { IsValid: true } placeName)
+			return this.StripInvalidChars(placeName.Value.Name.ExtractText());
+		return "Unknown";
+	}
+  
+	public string StripInvalidChars(string str) {
+		return Path.GetInvalidFileNameChars().Aggregate(str, (current, c) => current.Replace(c, '_'));
 	}
 }
