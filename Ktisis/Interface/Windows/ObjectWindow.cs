@@ -99,7 +99,7 @@ public class ObjectWindow : KtisisWindow {
 	private void DrawProperties(ITransformTarget? target) {
 		var selected = this._ctx.Selection.GetFirstSelected() ?? target?.Primary;
 		if (selected != null) {
-			this.WindowName = $"Object Editor - {selected.Name}###{WindowId}";
+			this.WindowName = $"对象编辑器 - {selected.Name}###{WindowId}";
 			this._propEditor.Draw(selected);
 		}
 	}

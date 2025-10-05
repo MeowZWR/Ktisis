@@ -30,7 +30,7 @@ public class CameraWindow : KtisisWindow {
 		TransformTable fixedPos,
 		TransformTable relativePos
 	) : base(
-		$"Camera Editor###{WindowId}"
+		$"相机编辑器###{WindowId}"
 	) {
 		this._ctx = ctx;
 		this._fixedPos = fixedPos;
@@ -52,7 +52,7 @@ public class CameraWindow : KtisisWindow {
 			MaximumSize = ImGui.GetIO().DisplaySize * 0.75f
 		};
 		IsWork = this._ctx.Cameras.IsWorkCameraActive;
-		this.WindowName = $"Camera Editor{(IsWork ? " [Work Camera]" : "")}###{WindowId}";
+		this.WindowName = $"相机编辑器{(IsWork ? " [工作相机]" : "")}###{WindowId}";
 	}
 	
 	public override void Draw() {

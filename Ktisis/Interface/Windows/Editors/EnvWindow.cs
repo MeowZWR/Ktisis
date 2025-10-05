@@ -50,7 +50,7 @@ public class EnvWindow : KtisisWindow {
 		StarsEditor stars,
 		WindEditor wind
 	) : base(
-		"Environment Editor"
+		"环境编辑器"
 	) {
 		this._scene = scene;
 		this._module = module;
@@ -113,7 +113,7 @@ public class EnvWindow : KtisisWindow {
 		
 		//Icons.DrawIcon(FontAwesomeIcon.Sun);
 		//ImGui.SameLine();
-		ImGui.Text("Weather");
+		ImGui.Text("天气");
 		
 		if (this._weatherSelect.Draw(env, out var newWeather) && newWeather != null) {
 			var id = (byte)newWeather.RowId;

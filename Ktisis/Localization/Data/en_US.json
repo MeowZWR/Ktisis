@@ -12,8 +12,8 @@
 	"actions": {
 		"Select_None": "取消选择",
 		"Overlay_Toggle": "切换叠加层可见性",
-		"History_Undo": "撤销动作",
-		"History_Redo": "重做动作",
+		"History_Undo": "撤销",
+		"History_Redo": "重做",
 		"Gizmo_Toggle": "切换变换器可见性",
 		"Gizmo_ToggleMode": "切换世界/本地模式",
 		"Gizmo_SetTranslateMode": "切换到位置模式",
@@ -92,7 +92,7 @@
 				"disable": "骨骼操纵当前处于禁用状态。"
 			}
 		},
-		"refresh_actors": "刷新场景演员",
+		"refresh_actors": "刷新场景角色",
 		"edit_mode.hint": "选择编辑模式",
 		"overlay.toggle": "切换屏幕叠加层"
 	},
