@@ -44,7 +44,12 @@ public class PoseImportDialog : EntityEditWindow<ActorEntity> {
 		
 		ImGui.Text($"正在为 {this.Target.Name} 导入姿势");
 		ImGui.Spacing();
-		
+
+		this.DrawEmbed();
+	}
+
+	public void DrawEmbed() {
+		this.PreDraw();
 		this._select.Draw();
 		
 		ImGui.Spacing();

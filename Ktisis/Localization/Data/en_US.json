@@ -110,6 +110,11 @@
 			"parallel": "并行变换",
 			"mirror": "镜像变换"
 		},
+		"sibling": {
+			"available": "多选兄弟骨骼：%bone%",
+			"unavailable": "骨骼 %bone% 没有兄弟骨骼",
+			"multiple": "多选兄弟骨骼：%bone%\n只能在选择1个骨骼时选择兄弟骨骼！"
+		},
 		"gizmo": {
 			"show": "显示旋转变换器",
 			"hide": "隐藏旋转变换器"
@@ -276,7 +281,10 @@
 		"workspace": {
 			"title": "工作区",
 			"init": "进入集体动作时打开",
+			"toggleOpenWindows": "UI按钮切换窗口开关",
+			"initPosLock": "进入GPose时冻结角色位置",
 			"editOnSelect": "选中时切换对象编辑器",
+			"closeOnDeselect": "未选择任何对象时关闭对象编辑器",
 			"incognitoPlayerNames": "隐身模式",
 			"hintIncognito": "在角色列表和拍照窗口中隐藏所有玩家名字",
 			"legacyWindows": "使用传统窗口行为",
@@ -294,7 +302,9 @@
 		"input": {
 			"title": "输入",
 			"enable": "启用按键绑定",
-			"help": "点击按键绑定以修改它们。右键点击以清除。"
+			"help": "点击按键绑定以修改它们。右键点击以清除。",
+			"blockLeft": "左键点击时禁用更改目标",
+			"blockRight": "右键点击时禁用更改目标"
 		},
 		"autosave": {
 			"title": "自动保存",
@@ -309,9 +319,28 @@
 		},
 		"presets": {
 			"title": "预设",
+			"description": "在下方查看和编辑您定义的预设。",
+			"defaults": "右键点击任何预设将其标记为默认。默认预设将初始为任何GPose角色启用。",
 			"delete_tooltip": "按住SHIFT以删除",
 			"delete": "删除",
 			"rename": "重命名"
+		},
+		"poseview": {
+			"title": "姿势视图",
+			"description": "在下方选择您自己的图像以在姿势视图界面中使用。",
+			"body": "身体",
+			"armor": "护甲（服装）",
+			"ears": "耳朵（维埃拉）",
+			"face": "脸部",
+			"hands": "手部",
+			"lips": "嘴唇",
+			"mouth": "嘴部",
+			"tail": "尾巴",
+			"linkout": {
+				"description": "在此下载模板图像：",
+				"button": "GitHub",
+				"link": "https://github.com/ktisis-tools/Ktisis/tree/v0.3/main/Ktisis/Data/Images/Templates"
+			}
 		}
 	},
 

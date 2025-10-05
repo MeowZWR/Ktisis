@@ -13,6 +13,7 @@ using Ktisis.Editor.Context.Types;
 using Ktisis.Editor.Posing.Ik.TwoJoints;
 using Ktisis.Editor.Posing.Ik.Types;
 using Ktisis.Interface.Editor.Properties.Types;
+using Ktisis.Interface.Windows.Import;
 using Ktisis.Localization;
 using Ktisis.Scene.Decor.Ik;
 using Ktisis.Scene.Entities;
@@ -24,12 +25,15 @@ namespace Ktisis.Interface.Editor.Properties;
 
 public class PosePropertyList : ObjectPropertyList {
 	private readonly IEditorContext _ctx;
+	private readonly GuiManager _gui;
 	private readonly LocaleManager _locale;
 	
 	public PosePropertyList(
 		IEditorContext ctx,
+		GuiManager gui,
 		LocaleManager locale
 	) {
+		this._gui = gui;
 		this._ctx = ctx;
 		this._locale = locale;
 	}
@@ -45,15 +49,15 @@ public class PosePropertyList : ObjectPropertyList {
 			builder.AddHeader("逆向动力学", () => this.DrawConstraintsTab(pose), priority: 2);
 	}
 
-	private void DrawPoseTab(EntityPose pose) {
+	private async void DrawPoseTab(EntityPose pose) {
 		var spacing = ImGui.GetStyle().ItemInnerSpacing.X;
 		
 		// Parenting toggle
 		ImGui.Checkbox(this._locale.Translate("transform_edit.transforms.parenting"), ref this._ctx.Config.Gizmo.ParentBones);
 		
-		// Import/export
-		
-		if (pose.Parent is not ActorEntity actor) return;
+		// Import/export when ActorEntity is being drawn for
+		var actor = pose.Parent;
+		if (actor is not ActorEntity) return;
 		ImGui.Spacing();
 		
 		if (ImGui.Button("导入"))
@@ -61,6 +65,38 @@ public class PosePropertyList : ObjectPropertyList {
 		ImGui.SameLine(0, spacing);
 		if (ImGui.Button("导出"))
 			this._ctx.Interface.OpenPoseExport(pose);
+		ImGui.Spacing();
+
+		if (ImGui.Button("设置为参考姿势"))
+			await this._ctx.Posing.ApplyReferencePose(pose);
+		ImGui.SameLine(0, spacing);
+
+		if (ImGui.Button("暂存姿势"))
+			await this._ctx.Posing.StashPose(pose);
+		ImGui.SameLine(0, spacing);
+
+		// todo: GLib.ButtonTooltip? currently only have a helper for IconButtonTooltip
+		var _hint = "";
+		using (var _disabled = ImRaii.Disabled(this._ctx.Posing.StashedPose == null)) {
+			_hint = _disabled ? "" : $"姿势暂存于 {this._ctx.Posing.StashedAt} 来自角色 {this._ctx.Posing.StashedFrom}";
+			if (ImGui.Button("应用姿势"))
+				await this._ctx.Posing.ApplyStashedPose(pose);
+		}
+		if (ImGui.IsItemHovered()) {
+			using (ImRaii.Tooltip())
+				ImGui.Text(_hint);
+		}
+
+		ImGui.Spacing();
+		ImGui.Separator();
+		ImGui.Spacing();
+		ImGui.Text($"导入姿势文件...");
+		ImGui.Spacing();
+
+		// pose import dialog
+		var embedEditor = this._gui.GetOrCreate<PoseImportDialog>(this._ctx);
+		embedEditor.SetTarget((ActorEntity)actor);
+		embedEditor.DrawEmbed();
 	}
 	
 	// Inverse Kinematics
@@ -178,6 +214,7 @@ public class PosePropertyList : ObjectPropertyList {
 	private static bool TryGetEntityPose(SceneEntity entity, [NotNullWhen(true)] out EntityPose? result) {
 		result = entity switch {
 			ActorEntity actor => actor.Pose,
+			BoneNodeGroup group => group.Pose,
 			BoneNode node => node.Pose,
 			EntityPose pose => pose,
 			_ => null

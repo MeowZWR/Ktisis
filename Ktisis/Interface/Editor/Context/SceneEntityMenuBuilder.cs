@@ -67,8 +67,12 @@ public class SceneEntityMenuBuilder {
 
 		menu.Separator().Action("重命名", () => this.Ui.OpenRenameEntity(this._entity));
 
-		if (this._entity is IDeletable deletable)
-			menu.Separator().Action("删除", () => deletable.Delete());
+		if (this._entity is IDeletable deletable) {
+			menu.Separator();
+			if (this._entity is ActorEntity actor)
+				menu.Action("复制", () => this.DuplicateActor(actor));
+			menu.Action("删除", () => deletable.Delete());
+		}
 	}
 	
 	// Entity types
@@ -94,12 +98,14 @@ public class SceneEntityMenuBuilder {
 	private unsafe void BuildActorMenu(ContextMenuBuilder menu, ActorEntity actor) {
 		menu.Separator()
 			.Action("设为目标", actor.Actor.SetGPoseTarget)
+			.Action($"{(actor.IsHidden ? "显示" : "隐藏")} 角色", actor.ToggleHidden)
 			.Separator()
 			.Action("编辑外观", this.OpenEditor)
 			.Group(sub => this.BuildActorIpcMenu(sub, actor))
 			.Separator()
 			.SubMenu("导入...", sub => {
 				var builder = sub.Action("角色文件 (.chara)", () => this.Ui.OpenCharaImport(actor))
+					.Action("NPC", () => this.Ui.OpenCharaImport(actor, true))
 					.Action("姿势文件 (.pose)", () => this.Ui.OpenPoseImport(actor));
 				
 				if (this._ctx.Plugin.Ipc.IsAnyMcdfActive && actor.GetHuman() != null) {
@@ -115,16 +121,28 @@ public class SceneEntityMenuBuilder {
 	}
 
 	private unsafe void BuildActorIpcMenu(ContextMenuBuilder menu, ActorEntity actor) {
-		if (this._ctx.Plugin.Ipc.IsPenumbraActive)
-			menu.Action("分配集合", () => this.Ui.OpenAssignCollection(actor));
-		if (this._ctx.Plugin.Ipc.IsCustomizeActive)
-			menu.Action("分配C+配置文件", () => this.Ui.OpenAssignCProfile(actor));
-		if (this._ctx.Plugin.Ipc.IsAnyMcdfActive && actor.GetHuman() != null)
-			menu.Action("还原IPC数据", () => this._ctx.Characters.Mcdf.Revert(actor.Actor));
+		menu.SubMenu("IPC 外观", sub => {
+			if (this._ctx.Plugin.Ipc.IsPenumbraActive)
+				sub.Action("Penumbra: 分配合集", () => this.Ui.OpenAssignCollection(actor));
+			if (this._ctx.Plugin.Ipc.IsGlamourerActive)
+				sub.Action("Glamourer: 应用设计", () => this.Ui.OpenApplyDesign(actor));
+			if (this._ctx.Plugin.Ipc.IsCustomizeActive)
+				sub.Action("Customize: 分配配置文件", () => this.Ui.OpenAssignCProfile(actor));
+			if (this._ctx.Plugin.Ipc.IsAnyMcdfActive && actor.GetHuman() != null)
+				sub.Action("还原IPC数据", () => this._ctx.Characters.Mcdf.Revert(actor.Actor));
+		});
 	}
 
 	private void ImportMcdf(ActorEntity actor, string path) {
 		this._ctx.Characters.Mcdf.LoadAndApplyTo(path, actor.Actor);
+	}
+
+	private async void DuplicateActor(ActorEntity actor) {
+		// pack actor into a temp charafile to apply to new actor after creation
+		var file = await this._ctx.Characters.SaveCharaFile(actor);
+		this._ctx.Scene.Factory.CreateActor()
+			.WithAppearance(file)
+			.Spawn();
 	}
 	
 	// Poses
