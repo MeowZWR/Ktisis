@@ -17,7 +17,7 @@ public class CharaImportDialog : EntityEditWindow<ActorEntity> {
 		IEditorContext ctx,
 		CharaImportUI import
 	) : base(
-		"Import Appearance",
+		"导入外观",
 		ctx,
 		ImGuiWindowFlags.AlwaysAutoResize
 	) {
@@ -40,7 +40,7 @@ public class CharaImportDialog : EntityEditWindow<ActorEntity> {
 	public override void Draw() {
 		this.UpdateTarget();
 		
-		ImGui.Text($"Importing appearance for {this.Target.Name}");
+		ImGui.Text($"正在为 {this.Target.Name} 导入外观");
 		ImGui.Spacing();
 		
 		this._import.DrawLoadMethods();
@@ -57,7 +57,7 @@ public class CharaImportDialog : EntityEditWindow<ActorEntity> {
 		ImGui.Spacing();
 		
 		using var _ = ImRaii.Disabled(!this._import.HasSelection);
-		if (ImGui.Button("Apply"))
+		if (ImGui.Button("应用"))
 			this._import.ApplyTo(this.Target);
 		
 		ImGui.Spacing();

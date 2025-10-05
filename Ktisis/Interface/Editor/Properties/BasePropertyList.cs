@@ -7,12 +7,12 @@ namespace Ktisis.Interface.Editor.Properties;
 
 public class BasePropertyList : ObjectPropertyList {
 	public override void Invoke(IPropertyListBuilder builder, SceneEntity entity) {
-		builder.AddHeader("General", () => this.DrawTab(entity), priority: -1);
+		builder.AddHeader("通用", () => this.DrawTab(entity), priority: -1);
 	}
 
 	private void DrawTab(SceneEntity entity) {
 		var name = entity.Name;
-		if (ImGui.InputText("Name", ref name, 100))
+		if (ImGui.InputText("名称", ref name, 100))
 			entity.Name = name;
 	}
 }

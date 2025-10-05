@@ -184,7 +184,7 @@ public class CustomizeEditorTab {
 		
 		var eyes = this.Editor.GetCustomization(CustomizeIndex.EyeShape);
 		var isSmall = (eyes & 0x80) != 0;
-		if (ImGui.Checkbox("Small Iris", ref isSmall))
+		if (ImGui.Checkbox("较小虹膜", ref isSmall))
 			this.Editor.SetCustomization(CustomizeIndex.EyeShape, (byte)(eyes ^ 0x80));
 	}
 	
@@ -200,16 +200,16 @@ public class CustomizeEditorTab {
 		this.DrawFacePaintOptions(data);
 		ImGui.Spacing();
 
-		if (ImGui.CollapsingHeader("Primary Features"))
+		if (ImGui.CollapsingHeader("主要特征"))
 			this.DrawFeatIconParams(data);
 		
 		ImGui.Spacing();
 
-		var faceFeatLabel = "Facial Features";
+		var faceFeatLabel = "面部特征";
 		var faceFeat = data.GetFeature(CustomizeIndex.FaceFeatures);
 		if (faceFeat != null && HasUniqueFeature(data.Tribe))
 			faceFeatLabel += $" / {faceFeat.Name}";
-		faceFeatLabel += " / Tattoos";
+		faceFeatLabel += "/纹身";
 		
 		if (ImGui.CollapsingHeader(faceFeatLabel))
 			this.DrawFacialFeatures(data);
@@ -318,7 +318,7 @@ public class CustomizeEditorTab {
 		
 		var facePaint = this.Editor.GetCustomization(CustomizeIndex.Facepaint);
 		var isFlipped = (facePaint & 0x80) != 0;
-		if (ImGui.Checkbox("Flip Face Paint", ref isFlipped))
+		if (ImGui.Checkbox("翻转面妆", ref isFlipped))
 			this.Editor.SetCustomization(CustomizeIndex.Facepaint, (byte)(facePaint ^ 0x80));
 	}
 	
@@ -438,7 +438,7 @@ public class CustomizeEditorTab {
 		using var _disable = ImRaii.Disabled(!hasHighlights);
 		this.DrawColorButton(CustomizeIndex.HairColor2, colors);
 		ImGui.SameLine(0, style.ItemInnerSpacing.X);
-		ImGui.Text("Highlights");
+		ImGui.Text("高光");
 	}
 
 	private void DrawEyeColorSwitch() {
@@ -471,7 +471,7 @@ public class CustomizeEditorTab {
 		this.DrawColorButton(isHetero ? CustomizeIndex.EyeColor2 : CustomizeIndex.EyeColor, colors);
 
 		ImGui.SameLine(0, style.ItemInnerSpacing.X);
-		ImGui.Text("Eye Color");
+		ImGui.Text("虹膜颜色");
 	}
 
 	private void DrawLipColorSwitch() {
@@ -494,6 +494,6 @@ public class CustomizeEditorTab {
 			this.DrawColorButton(CustomizeIndex.LipColor, colors);
 
 		ImGui.SameLine(0, style.ItemInnerSpacing.X);
-		ImGui.Text("Lipstick");
+		ImGui.Text("唇色");
 	}
 }

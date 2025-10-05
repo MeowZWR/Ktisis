@@ -68,7 +68,7 @@ public class CameraManager : ICameraManager {
 		if (gameCamera == null) return;
 
 		this.Active = this.Default = new EditorCamera(this) {
-			Name = "Main Camera",
+			Name = "主摄像机",
 			Address = (nint)gameCamera,
 			Flags = CameraFlags.DefaultCamera
 		};
@@ -76,7 +76,7 @@ public class CameraManager : ICameraManager {
 	}
 
 	private void SetupWorkCamera() {
-		this.WorkCamera ??= new WorkCamera(this, this._context) { Name = "Work Camera" };
+		this.WorkCamera ??= new WorkCamera(this, this._context) { Name = "工作摄像机" };
 		if (!this.CopyOntoCamera(this.WorkCamera))
 			throw new Exception("Failed to setup work camera.");
 	}
@@ -109,7 +109,7 @@ public class CameraManager : ICameraManager {
 
 	public void SetCurrent(EditorCamera camera) {
 		if (!camera.IsValid)
-			throw new Exception("Attempting to set invalid camera as current.");
+			throw new Exception("正在尝试将无效摄像机设置为当前摄像机。");
 		
 		if (this.Active == camera) return;
 		
@@ -194,12 +194,12 @@ public class CameraManager : ICameraManager {
 
 	private string GetNextAvailableName() {
 		for (var i = this.CameraList.Count + 1; i <= 100; i++) {
-			var name = $"Camera #{i}";
+			var name = $"相机 #{i}";
 			if (this.CameraList.Any(camera => camera.Name == name))
 				continue;
 			return name;
 		}
-		return "New Camera";
+		return "新摄像机";
 	}
 	
 	// Camera helpers

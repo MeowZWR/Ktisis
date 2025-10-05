@@ -170,41 +170,41 @@ public class EditorInterface : IEditorInterface {
 	// Import/export dialogs
 	
 	private readonly static FileDialogOptions CharaFileOptions = new() {
-		Filters = "Character Files{.chara}",
+		Filters = "角色文件{.chara}",
 		Extension = ".chara"
 	};
 
 	private readonly static FileDialogOptions PoseFileOptions = new() {
-		Filters = "Pose Files{.pose}",
+		Filters = "姿势文件{.pose}",
 		Extension = ".pose"
 	};
 
 	private readonly static FileDialogOptions McdfFileOptions = new() {
-		Filters = "MCDF Files{.mcdf}",
+		Filters = "MCDF 文件{.mcdf}",
 		Extension = ".mcdf"
 	};
 	
 	public void OpenCharaFile(Action<string, CharaFile> handler)
-		=> this._gui.FileDialogs.OpenFile("Open Chara File", handler, CharaFileOptions);
+		=> this._gui.FileDialogs.OpenFile("打开角色文件", handler, CharaFileOptions);
 
 	public void OpenPoseFile(Action<string, PoseFile> handler) {
-		this._gui.FileDialogs.OpenFile<PoseFile>("Open Pose File", (path, file) => {
+		this._gui.FileDialogs.OpenFile<PoseFile>("打开姿势文件", (path, file) => {
 			file.ConvertLegacyBones();
 			handler.Invoke(path, file);
 		}, PoseFileOptions);
 	}
 	
 	public void OpenMcdfFile(Action<string> handler) {
-		this._gui.FileDialogs.OpenFile("Open MCDF File", handler, McdfFileOptions);
+		this._gui.FileDialogs.OpenFile("打开MCDF文件", handler, McdfFileOptions);
 	}
 
 	public void OpenReferenceImages(Action<string> handler) {
-		this._gui.FileDialogs.OpenImage("image", handler);
+		this._gui.FileDialogs.OpenImage("图片", handler);
 	}
 
 	public void ExportCharaFile(CharaFile file)
-		=> this._gui.FileDialogs.SaveFile("Export Chara File", file, CharaFileOptions);
+		=> this._gui.FileDialogs.SaveFile("导出角色文件", file, CharaFileOptions);
 	
 	public void ExportPoseFile(PoseFile file)
-		=> this._gui.FileDialogs.SaveFile("Export Pose File", file, PoseFileOptions);
+		=> this._gui.FileDialogs.SaveFile("导出姿势文件", file, PoseFileOptions);
 }

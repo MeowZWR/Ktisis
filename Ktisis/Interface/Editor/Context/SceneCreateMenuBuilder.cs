@@ -31,25 +31,25 @@ public class SceneCreateMenuBuilder {
 	}
 
 	private void BuildActorGroup(ContextMenuBuilder sub) {
-		sub.Action("Create new actor", () => this.Factory.CreateActor().Spawn())
-			.Action("Import actor from file", this.ImportCharaFromFile)
-			.Action("Add overworld actor", this._ctx.Interface.OpenOverworldActorList);
+		sub.Action("新建角色", () => this.Factory.CreateActor().Spawn())
+			.Action("从文件导入角色", this.ImportCharaFromFile)
+			.Action("添加场景角色", this._ctx.Interface.OpenOverworldActorList);
 	}
 	
 	private void BuildLightGroup(ContextMenuBuilder sub)
-		=> sub.SubMenu("Create new light", this.BuildLightMenu);
+		=> sub.SubMenu("新建光源", this.BuildLightMenu);
 	
 	private void BuildLightMenu(ContextMenuBuilder sub) {
-		sub.Action("Point", () => SpawnLight(LightType.PointLight))
-			.Action("Spot", () => SpawnLight(LightType.SpotLight))
-			.Action("Area", () => SpawnLight(LightType.AreaLight))
-			.Action("Sun", () => SpawnLight(LightType.Directional));
+		sub.Action("点光源", () => SpawnLight(LightType.PointLight))
+			.Action("聚光灯", () => SpawnLight(LightType.SpotLight))
+			.Action("面光源", () => SpawnLight(LightType.AreaLight))
+			.Action("太阳光", () => SpawnLight(LightType.Directional));
 		
 		void SpawnLight(LightType type) => this.Factory.CreateLight(type).Spawn();
 	}
 
 	private void BuildUtilityGroup(ContextMenuBuilder sub) {
-		sub.Action("Add reference image", this.OpenReferenceImage);
+		sub.Action("添加参考图像", this.OpenReferenceImage);
 	}
 	
 	// Actor handling

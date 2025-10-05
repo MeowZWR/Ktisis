@@ -36,7 +36,7 @@ public class CommandService : IDisposable {
 
 	public void RegisterHandlers() {
 		this.BuildCommand("/ktisis", this.OnMainCommand)
-			.SetMessage("Toggle the main Ktisis window.")
+			.SetMessage("切换Ktisis主窗口。")
 			.Create();
 	}
 

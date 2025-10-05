@@ -90,10 +90,10 @@ public class AnimationEditorTab {
 		
 		var avail = ImGui.GetContentRegionAvail();
 		using (var _ = ImRaii.Child("##animFrame", avail with { X = avail.X * 0.35f })) {
-			ImGui.Text("Animation");
+			ImGui.Text("动作/表情");
 			this.DrawEmote();
 			ImGui.Spacing();
-			ImGui.Text("Idle Pose");
+			ImGui.Text("站姿");
 			this.DrawPose();
 		}
 		ImGui.SameLine(0, 0);
@@ -125,17 +125,17 @@ public class AnimationEditorTab {
 		if (ImGui.InputInt("##emote", ref intId))
 			this.TimelineId = (uint)intId;
 
-		if (ImGui.Button("Play"))
+		if (ImGui.Button("播放"))
 			this.PlayTimeline((uint)intId);
 		ImGui.SameLine(0, space);
-		if (ImGui.Button("Reset"))
+		if (ImGui.Button("重置"))
 			this.ResetTimeline();
 		ImGui.SameLine(0, space);
-		ImGui.Checkbox("Loop", ref this.ForceLoop);
+		ImGui.Checkbox("循环", ref this.ForceLoop);
 		
 		ImGui.Spacing();
 		
-		ImGui.Checkbox("Play emote start", ref this.PlayEmoteStart);
+		ImGui.Checkbox("从起始播放", ref this.PlayEmoteStart);
 	}
 
 	private void DrawPose() {
@@ -163,17 +163,17 @@ public class AnimationEditorTab {
 		ImGui.Spacing();
 
 		var isWeaponDrawn = this.Editor.IsWeaponDrawn;
-		if (ImGui.Checkbox("Weapon drawn", ref isWeaponDrawn))
+		if (ImGui.Checkbox("武器出鞘", ref isWeaponDrawn))
 			this.Editor.ToggleWeapon();
 
 		var posLock = this.Editor.PositionLockEnabled;
-		if (ImGui.Checkbox("Freeze positions", ref posLock))
+		if (ImGui.Checkbox("冻结位置", ref posLock))
 			this.Editor.PositionLockEnabled = posLock;
 	}
 
 	private unsafe void DrawTimelines() {
 		var speedCtrl = this.Editor.SpeedControlEnabled;
-		if (ImGui.Checkbox("Enable speed control", ref speedCtrl))
+		if (ImGui.Checkbox("启用速度控制", ref speedCtrl))
 			this.Editor.SpeedControlEnabled = speedCtrl;
 		
 		ImGui.Spacing();

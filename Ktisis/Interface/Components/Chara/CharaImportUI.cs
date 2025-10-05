@@ -101,7 +101,7 @@ public class CharaImportUI {
 			case LoadMethod.Npc:
 				this._npcs.Draw();
 				ImGui.Spacing();
-				ImGui.Checkbox("Apply on selection", ref this.Context.Config.File.ImportNpcApplyOnSelect);
+				ImGui.Checkbox("选择时自动应用", ref this.Context.Config.File.ImportNpcApplyOnSelect);
 				break;
 			default:
 				throw new ArgumentOutOfRangeException(this._method.ToString());
@@ -115,7 +115,7 @@ public class CharaImportUI {
 	public void DrawLoadMethods(float cursorY = -1.0f) {
 		var setCursorY = cursorY > -1.0f;
 		if (setCursorY) ImGui.SetCursorPosY(cursorY);
-		this.DrawMethodRadio("File", LoadMethod.File);
+		this.DrawMethodRadio("文件", LoadMethod.File);
 		ImGui.SameLine(0, ImGui.GetStyle().ItemInnerSpacing.X);
 		if (setCursorY) ImGui.SetCursorPosY(cursorY);
 		this.DrawMethodRadio("NPC", LoadMethod.Npc);
@@ -129,21 +129,21 @@ public class CharaImportUI {
 	// Mode selection
 	
 	public void DrawModesSelect() {
-		ImGui.Text("Appearance");
-		this.DrawModeSwitch("Body", SaveModes.AppearanceBody);
+		ImGui.Text("外观");
+		this.DrawModeSwitch("身体", SaveModes.AppearanceBody);
 		ImGui.SameLine();
-		this.DrawModeSwitch("Face", SaveModes.AppearanceFace);
+		this.DrawModeSwitch("面部", SaveModes.AppearanceFace);
 		ImGui.SameLine();
-		this.DrawModeSwitch("Hair", SaveModes.AppearanceHair);
+		this.DrawModeSwitch("发型", SaveModes.AppearanceHair);
 		
 		ImGui.Spacing();
 		
-		ImGui.Text("Equipment");
-		this.DrawModeSwitch("Gear", SaveModes.EquipmentGear);
+		ImGui.Text("装备");
+		this.DrawModeSwitch("主装备", SaveModes.EquipmentGear);
 		ImGui.SameLine();
-		this.DrawModeSwitch("Accessories", SaveModes.EquipmentAccessories);
+		this.DrawModeSwitch("饰品", SaveModes.EquipmentAccessories);
 		ImGui.SameLine();
-		this.DrawModeSwitch("Weapons", SaveModes.EquipmentWeapons);
+		this.DrawModeSwitch("武器", SaveModes.EquipmentWeapons);
 	}
 	
 	private void DrawModeSwitch(string label, SaveModes mode) {

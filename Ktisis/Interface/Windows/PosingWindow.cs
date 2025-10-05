@@ -41,7 +41,7 @@ public class PosingWindow : KtisisWindow {
 		LocaleManager locale,
 		GPoseService gpose
 	) : base(
-		"Pose View"
+		"姿势视图"
 	) {
 		this._ctx = ctx;
 		this._locale = locale;
@@ -55,7 +55,7 @@ public class PosingWindow : KtisisWindow {
 	
 	public override void PreOpenCheck() {
 		if (this._ctx.IsValid) return;
-		Ktisis.Log.Verbose("Context for posing window is stale, closing...");
+		Ktisis.Log.Verbose("姿势视图的上下文已失效，正在关闭...");
 		this.Close();
 	}
 
@@ -83,7 +83,7 @@ public class PosingWindow : KtisisWindow {
 			this._target = selected;
 
 		if (this._target is not { IsValid: true }) {
-			ImGui.Text("Select an actor to start editing its pose.");
+			ImGui.Text("选择一个角色来开始编辑其姿势。");
 			return;
 		}
 		
@@ -125,7 +125,7 @@ public class PosingWindow : KtisisWindow {
 		}
 
 		if (this._target is not { IsValid: true }) {
-			Ktisis.Log.Info("Targeted actor has no skeleton or is invalid.");
+			Ktisis.Log.Info("目标角色没有骨骼或无效。");
 			return;
 		}
 		
@@ -158,7 +158,7 @@ public class PosingWindow : KtisisWindow {
 	private void DrawViewSelect() {
 		using var _ = ImRaii.Group();
 
-		ImGui.Text("View:");
+		ImGui.Text("视图：");
 		
 		foreach (var value in Enum.GetValues<ViewEnum>()) {
 			if (ImGui.RadioButton(value.ToString(), this._view == value))
@@ -169,10 +169,10 @@ public class PosingWindow : KtisisWindow {
 	private void DrawImportExport(ActorEntity target) {
 		if (target.Pose == null) return;
 
-		if (ImGui.Button("Import"))
+		if (ImGui.Button("导入"))
 			this._ctx.Interface.OpenPoseImport(target);
 
-		if (ImGui.Button("Export"))
+		if (ImGui.Button("导出"))
 			this._ctx.Interface.OpenPoseExport(target.Pose);
 	}
 	

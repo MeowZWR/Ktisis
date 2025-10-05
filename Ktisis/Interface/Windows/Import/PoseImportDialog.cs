@@ -24,7 +24,7 @@ public class PoseImportDialog : EntityEditWindow<ActorEntity> {
 		IEditorContext ctx,
 		FileSelect<PoseFile> select
 	) : base(
-		"Import Pose",
+		"导入姿势",
 		ctx,
 		ImGuiWindowFlags.AlwaysAutoResize
 	) {
@@ -42,7 +42,7 @@ public class PoseImportDialog : EntityEditWindow<ActorEntity> {
 	public override void Draw() {
 		this.UpdateTarget();
 		
-		ImGui.Text($"Importing pose for {this.Target.Name}");
+		ImGui.Text($"正在为 {this.Target.Name} 导入姿势");
 		ImGui.Spacing();
 		
 		this._select.Draw();
@@ -67,60 +67,60 @@ public class PoseImportDialog : EntityEditWindow<ActorEntity> {
 		ImGui.Spacing();
 		ImGui.Spacing();
 
-		if (ImGui.Button("Apply"))
+		if (ImGui.Button("应用"))
 			this.ApplyPoseFile(isSelectBones);
 	}
 
 	private void DrawTransformSelect() {
-		ImGui.Text("Transforms:");
+		ImGui.Text("变换：");
 
 		var file = this._ctx.Config.File;
 		var trans = file.ImportPoseTransforms;
 
 		var rotation = trans.HasFlag(PoseTransforms.Rotation);
-		if (ImGui.Checkbox("Rotation##PoseImportRot", ref rotation))
+		if (ImGui.Checkbox("旋转##PoseImportRot", ref rotation))
 			file.ImportPoseTransforms ^= PoseTransforms.Rotation;
 		
 		ImGui.SameLine();
 
 		var position = trans.HasFlag(PoseTransforms.Position);
-		if (ImGui.Checkbox("Position##PoseImportPos", ref position))
+		if (ImGui.Checkbox("位置##PoseImportPos", ref position))
 			file.ImportPoseTransforms ^= PoseTransforms.Position;
 		
 		ImGui.SameLine();
 
 		var scale = trans.HasFlag(PoseTransforms.Scale);
-		if (ImGui.Checkbox("Scale##PoseImportScale", ref scale))
+		if (ImGui.Checkbox("缩放##PoseImportScale", ref scale))
 			file.ImportPoseTransforms ^= PoseTransforms.Scale;
 	}
 
 	private void DrawApplyModes(bool isSelectBones) {
-		ImGui.Text("Modes:");
+		ImGui.Text("模式：");
 
 		var file = this._ctx.Config.File;
 		var modes = file.ImportPoseModes;
 
 		var isSelectiveImport = file.ImportPoseSelectedBones && isSelectBones;
 		using (ImRaii.Disabled(!isSelectBones)) {
-			if (ImGui.Checkbox("Apply selected bones", ref isSelectiveImport))
+			if (ImGui.Checkbox("仅应用选中骨骼", ref isSelectiveImport))
 				file.ImportPoseSelectedBones ^= true;
 		}
 
 		if (!isSelectiveImport) {
 			var body = modes.HasFlag(PoseMode.Body);
-			if (ImGui.Checkbox("Body##PoseImportBody", ref body))
+			if (ImGui.Checkbox("身体##PoseImportBody", ref body))
 				file.ImportPoseModes ^= PoseMode.Body;
 
 			ImGui.SameLine();
 
 			var face = modes.HasFlag(PoseMode.Face);
-			if (ImGui.Checkbox("Face##PoseImportFace", ref face))
+			if (ImGui.Checkbox("面部##PoseImportFace", ref face))
 				file.ImportPoseModes ^= PoseMode.Face;
 		}
 
 		var hasPosition = file.ImportPoseTransforms.HasFlag(PoseTransforms.Position);
 		using (ImRaii.Disabled(!isSelectBones || !file.ImportPoseSelectedBones || !hasPosition))
-			ImGui.Checkbox("Anchor group positions", ref file.AnchorPoseSelectedBones);
+			ImGui.Checkbox("锚定分组位置", ref file.AnchorPoseSelectedBones);
 	}
 	
 	// Apply pose

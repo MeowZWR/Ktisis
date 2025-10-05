@@ -40,9 +40,9 @@ public class PosePropertyList : ObjectPropertyList {
 		if (!TryGetEntityPose(entity, out var pose))
 			return;
 		
-		builder.AddHeader("Pose", () => this.DrawPoseTab(pose), priority: 1);
+		builder.AddHeader("姿势", () => this.DrawPoseTab(pose), priority: 1);
 		if (pose.IkController.GroupCount > 0)
-			builder.AddHeader("Inverse Kinematics", () => this.DrawConstraintsTab(pose), priority: 2);
+			builder.AddHeader("逆向动力学", () => this.DrawConstraintsTab(pose), priority: 2);
 	}
 
 	private void DrawPoseTab(EntityPose pose) {
@@ -56,10 +56,10 @@ public class PosePropertyList : ObjectPropertyList {
 		if (pose.Parent is not ActorEntity actor) return;
 		ImGui.Spacing();
 		
-		if (ImGui.Button("Import"))
+		if (ImGui.Button("导入"))
 			this._ctx.Interface.OpenPoseImport(actor);
 		ImGui.SameLine(0, spacing);
-		if (ImGui.Button("Export"))
+		if (ImGui.Button("导出"))
 			this._ctx.Interface.OpenPoseExport(pose);
 	}
 	
@@ -88,13 +88,13 @@ public class PosePropertyList : ObjectPropertyList {
 
 			using (ImRaii.PushColor(ImGuiCol.Button, ImGui.GetColorU32(ImGuiCol.ButtonActive), node.IsSelected)) {
 				var canSelect = !node.IsSelected || this._ctx.Selection.Count > 1;
-				if (Buttons.IconButtonTooltip(FontAwesomeIcon.HandPointer, "Select", Vector2.Zero) && canSelect)
+				if (Buttons.IconButtonTooltip(FontAwesomeIcon.HandPointer, "选择", Vector2.Zero) && canSelect)
 					node.Select(GuiHelpers.GetSelectMode());
 			}
 
 			ImGui.SameLine(0, spacing);
 
-			if (Buttons.IconButtonTooltip(FontAwesomeIcon.EllipsisH, "Configure", Vector2.Zero))
+			if (Buttons.IconButtonTooltip(FontAwesomeIcon.EllipsisH, "配置", Vector2.Zero))
 				ImGui.OpenPopup(IkCfgPopup);
 
 			if (!ImGui.IsPopupOpen(IkCfgPopup)) continue;
@@ -106,7 +106,7 @@ public class PosePropertyList : ObjectPropertyList {
 
 	private void DrawIkConfig(IIkNode ik) {
 		var isEnabled = ik.IsEnabled;
-		if (ImGui.Checkbox("Enabled", ref isEnabled)) {
+		if (ImGui.Checkbox("启用", ref isEnabled)) {
 			if (isEnabled)
 				ik.Enable();
 			else
@@ -150,9 +150,9 @@ public class PosePropertyList : ObjectPropertyList {
 		ImGui.Spacing();
 		
 		ImGui.Text(this._locale.Translate("transform_edit.ik.two_joints.gain"));
-		ImGui.SliderFloat("Shoulder##FirstWeight", ref node.Group.FirstBoneGain, 0.0f, 1.0f, "%.2f");
-		ImGui.SliderFloat("Elbow##SecondWeight", ref node.Group.SecondBoneGain, 0.0f, 1.0f, "%.2f");
-		ImGui.SliderFloat("Hand##HandWeight", ref node.Group.EndBoneGain, 0.0f, 1.0f, "%.2f");
+		ImGui.SliderFloat("肩部##FirstWeight", ref node.Group.FirstBoneGain, 0.0f, 1.0f, "%.2f");
+		ImGui.SliderFloat("肘部##SecondWeight", ref node.Group.SecondBoneGain, 0.0f, 1.0f, "%.2f");
+		ImGui.SliderFloat("手部##HandWeight", ref node.Group.EndBoneGain, 0.0f, 1.0f, "%.2f");
 		
 		ImGui.Spacing();
 		ImGui.Separator();
@@ -160,9 +160,9 @@ public class PosePropertyList : ObjectPropertyList {
 		
 		ImGui.Text(this._locale.Translate("transform_edit.ik.two_joints.hinges"));
 		ImGui.Spacing();
-		ImGui.SliderFloat("Minimum", ref node.Group.MinHingeAngle, -1.0f, 1.0f, "%.2f");
-		ImGui.SliderFloat("Maximum", ref node.Group.MaxHingeAngle, -1.0f, 1.0f, "%.2f");
-		ImGui.SliderFloat3("Axis", ref node.Group.HingeAxis, -1.0f, 1.0f, "%.2f");
+		ImGui.SliderFloat("最小值", ref node.Group.MinHingeAngle, -1.0f, 1.0f, "%.2f");
+		ImGui.SliderFloat("最大值", ref node.Group.MaxHingeAngle, -1.0f, 1.0f, "%.2f");
+		ImGui.SliderFloat3("轴向", ref node.Group.HingeAxis, -1.0f, 1.0f, "%.2f");
 		
 		ImGui.Spacing();
 	}

@@ -22,7 +22,7 @@ public class MigratorWindow : KtisisWindow {
 		IDalamudPluginInterface dpi,
 		LegacyMigrator migrator
 	) : base(
-		"Ktisis Development Preview",
+		"Ktisis 开发者预览版",
 		ImGuiWindowFlags.AlwaysAutoResize
 	) {
 		this._dpi = dpi;
@@ -54,18 +54,18 @@ public class MigratorWindow : KtisisWindow {
 		
 		Icons.DrawIcon(FontAwesomeIcon.ExclamationCircle);
 		ImGui.SameLine();
-		ImGui.Text("You have installed a development version of Ktisis.");
+		ImGui.Text("您已经安装了Ktisis的开发版本。");
 		
 		ImGui.Spacing();
 		
-		ImGui.Text("This version is currently a ");
+		ImGui.Text("此版本目前是 ");
 		ImGui.SameLine(0, style.ItemInnerSpacing.X);
 		using (var _ = ImRaii.PushColor(ImGuiCol.Text, ColorYellow))
-			ImGui.Text("development preview");
+			ImGui.Text("开发预览版本");
 		ImGui.SameLine(0, style.ItemInnerSpacing.X);
-		ImGui.Text(" - it is primarily a testbed for new features.");
+		ImGui.Text(" - 它主要用于测试新功能。");
 		
-		ImGui.Text("Only the bare essentials have been implemented at this stage so a lot of UI/UX will be missing.");
+		ImGui.Text("在这个阶段只实现了最基本的功能，因此将缺少许多UI/UX。");
 		
 		ImGui.Spacing();
 		ImGui.Separator();
@@ -73,37 +73,37 @@ public class MigratorWindow : KtisisWindow {
 		
 		Icons.DrawIcon(FontAwesomeIcon.QuestionCircle);
 		ImGui.SameLine();
-		ImGui.Text("What to expect:");
+		ImGui.Text("预期内容：");
 		
 		ImGui.Spacing();
 		
-		ImGui.Text("This is not the full feature set of the final release.");
+		ImGui.Text("这不是具有完整功能的最终版本。");
 		ImGui.Text(
-			"The following will be introduced at a later point during testing:\n" +
-			"	• Everything missing from the current release\n" +
-			"	• Editing spawned weapons and props\n" +
-			"	• Equipment model manipulation\n" +
-			"	• Importing and exporting light presets\n" +
-			"	• Animation controls\n" +
-			"	• Copy & paste\n"
+			"以下内容将在稍后的测试中引入：\n" +
+			"	• 当前版本中缺少的所有内容\n" +
+			"	• 编辑武器和道具\n" +
+			"	• 操作装备模型\n" +
+			"	• 导入和导出灯光预设\n" +
+			"	• 动画控制\n" +
+			"	• 复制&粘贴\n"
 		);
 		
 		ImGui.Spacing();
-		ImGui.Text("Undo and redo is currently only implemented for object transforms.");
-		ImGui.Text("Support is planned for edits made to objects, such as appearance changes.");
+		ImGui.Text("撤消和重做当前仅对对象变换生效。");
+		ImGui.Text("计划支持对对象进行编辑，例如外观更改。");
 		ImGui.Spacing();
-		ImGui.Text("Character appearance edits may also conflict with changes made by Glamourer.");
-		ImGui.Text("I hope to discuss with its developer about implementing an IPC to resolve this.");
+		ImGui.Text("角色外观编辑也可能与Glamourer所做的更改相冲突。");
+		ImGui.Text("我希望与Glamourer的开发人员讨论如何实现IPC来解决这个问题。");
 		ImGui.Spacing();
-		ImGui.Text("Many configuration options will also be missing, which will be added during the testing period.");
-		ImGui.Text("Your current configuration will not be carried over into this version.");
+		ImGui.Text("许多配置选项也将丢失，这些选项将在测试期间陆续添加。");
+		ImGui.Text("您当前的配置不会转入此版本。");
 		
 		ImGui.Spacing();
 		ImGui.Separator();
 		ImGui.Spacing();
 		
 		using (var _ = ImRaii.Disabled(!this.CanBegin && !(ImGui.IsKeyDown(ImGuiKey.ModCtrl) && ImGui.IsKeyDown(ImGuiKey.ModShift)))) {
-			var text = this.CanBegin ? "Begin" : $"Begin ({Math.Ceiling((decimal)WaitTime - this._timer.Elapsed.Seconds)}s)";
+			var text = this.CanBegin ? "开始" : $"开始（{Math.Ceiling((decimal)WaitTime - this._timer.Elapsed.Seconds)} 秒）";
 			if (ImGui.Button(text)) {
 				this._migrator.Begin();
 				this.Close();
@@ -112,7 +112,7 @@ public class MigratorWindow : KtisisWindow {
 		
 		ImGui.SameLine();
 		
-		if (ImGui.Button("Close"))
+		if (ImGui.Button("关闭"))
 			this.Close();
 		
 		ImGui.Spacing();

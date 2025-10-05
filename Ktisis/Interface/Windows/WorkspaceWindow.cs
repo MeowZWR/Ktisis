@@ -24,7 +24,7 @@ public class WorkspaceWindow : KtisisWindow {
 	
 	public WorkspaceWindow(
 		IEditorContext ctx
-	) : base("Ktisis Workspace") {
+	) : base("Ktisis 工作区") {
 		this._ctx = ctx;
 		this._cameras = new CameraSelector(ctx);
 		this._workspace = new WorkspaceState(ctx);
@@ -39,7 +39,7 @@ public class WorkspaceWindow : KtisisWindow {
 
 	public override void PreOpenCheck() {
 		if (this._ctx.IsValid) return;
-		Ktisis.Log.Verbose("Context for workspace window is stale, closing...");
+		Ktisis.Log.Verbose("工作区窗口的上下文已失效，正在关闭...");
 		this.Close();
 	}
 	

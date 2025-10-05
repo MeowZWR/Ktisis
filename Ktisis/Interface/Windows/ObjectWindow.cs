@@ -30,7 +30,7 @@ public class ObjectWindow : KtisisWindow {
 		TransformTable table,
 		PropertyEditor propEditor
 	) : base(
-		"Object Editor"
+		"对象编辑器"
 	) {
 		this._ctx = ctx;
 		this._gizmo = gizmo;
@@ -46,7 +46,7 @@ public class ObjectWindow : KtisisWindow {
 
 	public override void PreOpenCheck() {
 		if (this._ctx.IsValid) return;
-		Ktisis.Log.Verbose("Context for transform window is stale, closing...");
+		Ktisis.Log.Verbose("变换窗口的上下文已失效，正在关闭...");
 		this.Close();
 	}
 

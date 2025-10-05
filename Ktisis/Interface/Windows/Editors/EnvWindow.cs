@@ -131,7 +131,7 @@ public class EnvWindow : KtisisWindow {
 			this._module.Override ^= EnvOverride.TimeWeather;
 		}
 		ImGui.SameLine();
-		ImGui.Text("Time and Day");
+		ImGui.Text("时间与日期");
 
 		using var _disable = ImRaii.Disabled(!isLocked);
 		
@@ -146,7 +146,7 @@ public class EnvWindow : KtisisWindow {
 	private void DrawAdvancedList() {
 		//Icons.DrawIcon(FontAwesomeIcon.Cog);
 		//ImGui.SameLine();
-		ImGui.Text("Advanced Editing");
+		ImGui.Text("高级编辑");
 		
 		var size = ImGui.GetContentRegionAvail();
 		size.Y -= ImGui.GetStyle().WindowPadding.Y / 2;

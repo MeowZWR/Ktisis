@@ -43,32 +43,32 @@ public class SceneEntityMenuBuilder {
 
 	private void BuildEntityBaseTop(ContextMenuBuilder menu) {
 		if (!this._entity.IsSelected)
-			menu.Action("Select", () => this._entity.Select(SelectMode.Multiple));
+			menu.Action("选择", () => this._entity.Select(SelectMode.Multiple));
 		else
-			menu.Action("Unselect", this._entity.Unselect);
+			menu.Action("取消选择", this._entity.Unselect);
 
 		if (this._entity is IVisibility vis)
-			menu.Action("Toggle display", () => vis.Toggle());
+			menu.Action("切换显示", () => vis.Toggle());
 
 		if (this._entity.Root is ActorEntity actorEntity)
-			menu.SubMenu("Presets...", sub => {
+			menu.SubMenu("预设...", sub => {
 				foreach (var (name, isEnabled) in actorEntity.GetPresets()) {
 					sub.CheckableAction(name, isEnabled != PresetState.Disabled, () => actorEntity.TogglePreset(name));
 				}
 
 				sub.Separator()
-					.Action("Save New", () => this.Ui.OpenSavePreset(actorEntity));
+					.Action("保存新预设", () => this.Ui.OpenSavePreset(actorEntity));
 			});
 	}
 
 	private void BuildEntityBaseBottom(ContextMenuBuilder menu) {
 		if (this._entity is IAttachable attach && attach.IsAttached())
-			menu.Separator().Action("Detach", () => this._ctx.Posing.Attachments.Detach(attach));
+			menu.Separator().Action("分离", () => this._ctx.Posing.Attachments.Detach(attach));
 
-		menu.Separator().Action("Rename", () => this.Ui.OpenRenameEntity(this._entity));
+		menu.Separator().Action("重命名", () => this.Ui.OpenRenameEntity(this._entity));
 
 		if (this._entity is IDeletable deletable)
-			menu.Separator().Action("Delete", () => deletable.Delete());
+			menu.Separator().Action("删除", () => deletable.Delete());
 	}
 	
 	// Entity types
@@ -93,34 +93,34 @@ public class SceneEntityMenuBuilder {
 
 	private unsafe void BuildActorMenu(ContextMenuBuilder menu, ActorEntity actor) {
 		menu.Separator()
-			.Action("Target", actor.Actor.SetGPoseTarget)
+			.Action("设为目标", actor.Actor.SetGPoseTarget)
 			.Separator()
-			.Action("Edit appearance", this.OpenEditor)
+			.Action("编辑外观", this.OpenEditor)
 			.Group(sub => this.BuildActorIpcMenu(sub, actor))
 			.Separator()
-			.SubMenu("Import...", sub => {
-				var builder = sub.Action("Character (.chara)", () => this.Ui.OpenCharaImport(actor))
-					.Action("Pose file (.pose)", () => this.Ui.OpenPoseImport(actor));
+			.SubMenu("导入...", sub => {
+				var builder = sub.Action("角色文件 (.chara)", () => this.Ui.OpenCharaImport(actor))
+					.Action("姿势文件 (.pose)", () => this.Ui.OpenPoseImport(actor));
 				
 				if (this._ctx.Plugin.Ipc.IsAnyMcdfActive && actor.GetHuman() != null) {
-					builder.Action("Mare data (.mcdf)", () => {
+					builder.Action("Mare数据 (.mcdf)", () => {
 						this.Ui.OpenMcdfFile(path => this.ImportMcdf(actor, path));
 					});
 				}
 			})
-			.SubMenu("Export...", sub => {
-				sub.Action("Character (.chara)", () => this.Ui.OpenCharaExport(actor))
-					.Action("Pose file (.pose)", () => this.ExportPose(actor.Pose));
+			.SubMenu("导出...", sub => {
+				sub.Action("角色文件 (.chara)", () => this.Ui.OpenCharaExport(actor))
+					.Action("姿势文件 (.pose)", () => this.ExportPose(actor.Pose));
 			});
 	}
 
 	private unsafe void BuildActorIpcMenu(ContextMenuBuilder menu, ActorEntity actor) {
 		if (this._ctx.Plugin.Ipc.IsPenumbraActive)
-			menu.Action("Assign collection", () => this.Ui.OpenAssignCollection(actor));
+			menu.Action("分配集合", () => this.Ui.OpenAssignCollection(actor));
 		if (this._ctx.Plugin.Ipc.IsCustomizeActive)
-			menu.Action("Assign C+ profile", () => this.Ui.OpenAssignCProfile(actor));
+			menu.Action("分配C+配置文件", () => this.Ui.OpenAssignCProfile(actor));
 		if (this._ctx.Plugin.Ipc.IsAnyMcdfActive && actor.GetHuman() != null)
-			menu.Action("Revert IPC data", () => this._ctx.Characters.Mcdf.Revert(actor.Actor));
+			menu.Action("还原IPC数据", () => this._ctx.Characters.Mcdf.Revert(actor.Actor));
 	}
 
 	private void ImportMcdf(ActorEntity actor, string path) {
@@ -131,10 +131,10 @@ public class SceneEntityMenuBuilder {
 
 	private void BuildPoseMenu(ContextMenuBuilder menu, EntityPose pose) {
 		menu.Separator()
-			.Action("Import pose", () => this.ImportPose(pose))
-			.Action("Export pose", () => this.ExportPose(pose))
+			.Action("导入姿势", () => this.ImportPose(pose))
+			.Action("导出姿势", () => this.ExportPose(pose))
 			.Separator()
-			.Action("Set to reference pose", () => this._ctx.Posing.ApplyReferencePose(pose));
+			.Action("设为参考姿势", () => this._ctx.Posing.ApplyReferencePose(pose));
 	}
 
 	private void ImportPose(EntityPose pose) {
@@ -151,9 +151,9 @@ public class SceneEntityMenuBuilder {
 
 	private void BuildLightMenu(ContextMenuBuilder menu, LightEntity light) {
 		menu.Separator()
-			.Action("Edit lighting", this.OpenEditor)
+			.Action("编辑光照", this.OpenEditor)
 			.Separator()
-			.Action("Import preset (TODO)", () => { })
-			.Action("Export preset (TODO)", () => { });
+			.Action("导入预设（待实现）", () => { })
+			.Action("导出预设（待实现）", () => { });
 	}
 }

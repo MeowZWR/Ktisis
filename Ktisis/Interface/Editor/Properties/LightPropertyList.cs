@@ -21,8 +21,8 @@ public class LightPropertyList : ObjectPropertyList {
 		if (entity is not LightEntity light)
 			return;
 		
-		builder.AddHeader("Light", () => this.DrawLightTab(light));
-		builder.AddHeader("Shadows", () => this.DrawShadowsTab(light));
+		builder.AddHeader("光源", () => this.DrawLightTab(light));
+		builder.AddHeader("阴影", () => this.DrawShadowsTab(light));
 	}
 
 	private unsafe void DrawLightTab(LightEntity entity) {
@@ -30,13 +30,13 @@ public class LightPropertyList : ObjectPropertyList {
 		var light = sceneLight != null ? sceneLight->RenderLight : null;
 		if (light == null) return;
 		
-		this.DrawLightFlag("Enable reflections", light, LightFlags.Reflection);
+		this.DrawLightFlag("启用反射", light, LightFlags.Reflection);
 		ImGui.Spacing();
 		
 		// Light type
 		
 		var lightTypePreview = this._locale.Translate($"lightType.{light->LightType}");
-		if (ImGui.BeginCombo("Light Type", lightTypePreview)) {
+		if (ImGui.BeginCombo("光源类型", lightTypePreview)) {
 			foreach (var value in Enum.GetValues<LightType>()) {
 				var valueLabel = this._locale.Translate($"lightType.{value}");
 				if (ImGui.Selectable(valueLabel, light->LightType == value))
@@ -47,8 +47,8 @@ public class LightPropertyList : ObjectPropertyList {
 		
 		switch (light->LightType) {
 			case LightType.SpotLight:
-				ImGui.SliderFloat("Cone Angle##LightAngle", ref light->LightAngle, 0.0f, 180.0f, "%0.0f deg");
-				ImGui.SliderFloat("Falloff Angle##LightAngle", ref light->FalloffAngle, 0.0f, 180.0f, "%0.0f deg");
+				ImGui.SliderFloat("锥角##LightAngle", ref light->LightAngle, 0.0f, 180.0f, "%0.0f 度");
+				ImGui.SliderFloat("衰减角##LightAngle", ref light->FalloffAngle, 0.0f, 180.0f, "%0.0f 度");
 				break;
 			case LightType.AreaLight:
 				var angleSpace = ImGui.GetStyle().ItemInnerSpacing.X;
@@ -56,9 +56,9 @@ public class LightPropertyList : ObjectPropertyList {
 				ImGui.PushItemWidth(angleWidth);
 				ImGui.SliderAngle("##AngleX", ref light->AreaAngle.X, -90, 90);
 				ImGui.SameLine(0, angleSpace);
-				ImGui.SliderAngle("Light Angle##AngleY", ref light->AreaAngle.Y, -90, 90);
+				ImGui.SliderAngle("光源角度##AngleY", ref light->AreaAngle.Y, -90, 90);
 				ImGui.PopItemWidth();
-				ImGui.SliderFloat("Falloff Angle##LightAngle", ref light->FalloffAngle, 0.0f, 180.0f, "%0.0f deg");
+				ImGui.SliderFloat("衰减角##LightAngle", ref light->FalloffAngle, 0.0f, 180.0f, "%0.0f 度");
 				break;
 		}
 		
@@ -67,7 +67,7 @@ public class LightPropertyList : ObjectPropertyList {
 		// Falloff
 		
 		var falloffPreview = this._locale.Translate($"lightFalloff.{light->FalloffType}");
-		if (ImGui.BeginCombo("Falloff Type", falloffPreview)) {
+		if (ImGui.BeginCombo("衰减类型", falloffPreview)) {
 			foreach (var value in Enum.GetValues<FalloffType>()) {
 				var valueLabel = this._locale.Translate($"lightFalloff.{value}");
 				if (ImGui.Selectable(valueLabel, light->FalloffType == value))
@@ -76,17 +76,17 @@ public class LightPropertyList : ObjectPropertyList {
 			ImGui.EndCombo();
 		}
 
-		ImGui.DragFloat("Falloff Power##FalloffPower", ref light->Falloff, 0.01f, 0.0f, 1000.0f);
+		ImGui.DragFloat("衰减强度##FalloffPower", ref light->Falloff, 0.01f, 0.0f, 1000.0f);
 		
 		// Base light settings
 		
 		ImGui.Spacing();
 		
 		var color = light->Color.RGB;
-		if (ImGui.ColorEdit3("Color", ref color, ImGuiColorEditFlags.Hdr | ImGuiColorEditFlags.Uint8))
+		if (ImGui.ColorEdit3("颜色", ref color, ImGuiColorEditFlags.Hdr | ImGuiColorEditFlags.Uint8))
 			light->Color.RGB = color;
-		ImGui.DragFloat("Intensity", ref light->Color.Intensity, 0.01f, 0.0f, 100.0f);
-		if (ImGui.DragFloat("Range##LightRange", ref light->Range, 0.1f, 0, 999))
+		ImGui.DragFloat("强度", ref light->Color.Intensity, 0.01f, 0.0f, 100.0f);
+		if (ImGui.DragFloat("范围##LightRange", ref light->Range, 0.1f, 0, 999))
 			entity.Flags |= LightEntityFlags.Update;
 	}
 
@@ -95,19 +95,18 @@ public class LightPropertyList : ObjectPropertyList {
 		var light = sceneLight != null ? sceneLight->RenderLight : null;
 		if (light == null) return;
 		
-		this.DrawLightFlag("Dynamic shadows", light, LightFlags.Dynamic);
+		this.DrawLightFlag("动态阴影", light, LightFlags.Dynamic);
 		ImGui.Spacing();
 		
-		this.DrawLightFlag("Cast character shadows", light, LightFlags.CharaShadow);
-		this.DrawLightFlag("Cast object shadows", light, LightFlags.ObjectShadow);
+		this.DrawLightFlag("投射角色阴影", light, LightFlags.CharaShadow);
+		this.DrawLightFlag("投射物体阴影", light, LightFlags.ObjectShadow);
 
 		ImGui.Spacing();
-		ImGui.DragFloat("Shadow Range", ref light->CharaShadowRange, 0.1f, 0.0f, 1000.0f);
+		ImGui.DragFloat("阴影范围", ref light->CharaShadowRange, 0.1f, 0.0f, 1000.0f);
 		ImGui.Spacing();
-		ImGui.DragFloat("Shadow Near", ref light->ShadowNear, 0.01f, 0.0f, 1000.0f);
-		ImGui.DragFloat("Shadow Far", ref light->ShadowFar, 0.01f, 0.0f, 1000.0f);
+		ImGui.DragFloat("阴影近距", ref light->ShadowNear, 0.01f, 0.0f, 1000.0f);
+		ImGui.DragFloat("阴影远距", ref light->ShadowFar, 0.01f, 0.0f, 1000.0f);
 	}
-	
 	private unsafe void DrawLightFlag(string label, RenderLight* light, LightFlags flag) {
 		var active = light->Flags.HasFlag(flag);
 		if (ImGui.Checkbox(label, ref active))

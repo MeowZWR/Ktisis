@@ -31,11 +31,11 @@ public class CameraSelector {
 		this.DrawSelector();
 		
 		ImGui.SameLine(0, spacing);
-		if (Buttons.IconButtonTooltip(FontAwesomeIcon.Plus, "Create new camera"))
+		if (Buttons.IconButtonTooltip(FontAwesomeIcon.Plus, "创建新相机"))
 			this.Cameras.Create();
 
 		ImGui.SameLine(0, spacing);
-		if (Buttons.IconButtonTooltip(FontAwesomeIcon.PencilAlt, "Edit camera"))
+		if (Buttons.IconButtonTooltip(FontAwesomeIcon.PencilAlt, "编辑相机"))
 			this._ctx.Interface.OpenCameraWindow();
 		
 		ImGui.SameLine(0, spacing);
@@ -47,7 +47,7 @@ public class CameraSelector {
 		using var bgCol = ImRaii.PushColor(ImGuiCol.Button, ImGui.GetColorU32(ImGuiCol.ButtonActive), isFreecam);
 		using var iconCol = ImRaii.PushColor(ImGuiCol.Text, ImGui.GetColorU32(ImGuiCol.Text).SetAlpha(0xCF), !isFreecam);
 		
-		if (Buttons.IconButtonTooltip(FontAwesomeIcon.Camera, "Toggle work camera"))
+		if (Buttons.IconButtonTooltip(FontAwesomeIcon.Camera, "切换工作相机"))
 			this.Cameras.ToggleWorkCameraMode();
 	}
 	
@@ -60,7 +60,7 @@ public class CameraSelector {
 		using var _ = ImRaii.Disabled(this.Cameras.IsWorkCameraActive);
         
 		var current = this.Cameras.Current;
-		var combo = ImGui.BeginCombo("##CameraSelectList", current?.Name ?? "INVALID");
+		var combo = ImGui.BeginCombo("##CameraSelectList", current?.Name ?? "无效");
 		if (combo) {
 			// Restore last scroll position
 			if (!this._isOpen && this._lastScroll > 0.0f)

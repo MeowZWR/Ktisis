@@ -9,18 +9,18 @@ namespace Ktisis.Interface.Components.Environment.Editors;
 
 [Transient]
 public class WindEditor : EditorBase {
-	public override string Name { get; } = "Wind";
+	public override string Name { get; } = "风";
 
 	public override bool IsActivated(EnvOverride flags)
 		=> flags.HasFlag(EnvOverride.Wind);
 	
 	public override void Draw(IEnvModule module, ref EnvState state) {
-		this.DrawToggleCheckbox("Enable", EnvOverride.Wind, module);
+		this.DrawToggleCheckbox("启用", EnvOverride.Wind, module);
 		using var _ = this.Disable(module);
 		
-		this.DrawAngle("Direction", ref state.Wind.Direction, 0.0f, 360.0f);
-		this.DrawAngle("Angle", ref state.Wind.Angle, 0.0f, 180.0f);
-		ImGui.SliderFloat("Speed", ref state.Wind.Speed, 0.0f, 1.5f);
+		this.DrawAngle("方向", ref state.Wind.Direction, 0.0f, 360.0f);
+		this.DrawAngle("角度", ref state.Wind.Angle, 0.0f, 180.0f);
+		ImGui.SliderFloat("速度", ref state.Wind.Speed, 0.01f, 1.5f);
 	}
 
 	private void DrawAngle(string label, ref float angle, float min, float max) {

@@ -228,7 +228,7 @@ public class SceneTree {
 		var bone = attach.GetParentBone();
 		var name = bone != null ? this._ctx.Locale.GetBoneName(bone) : "UNKNOWN";
 		using var _ = ImRaii.Tooltip();
-		ImGui.Text($"Attached to {name}");
+		ImGui.Text($"吸附到 {name}");
 	}
 
 	private bool DrawButton(ref float cursor, FontAwesomeIcon icon, uint? color = null) {

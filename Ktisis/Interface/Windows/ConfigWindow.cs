@@ -42,7 +42,7 @@ public class ConfigWindow : KtisisWindow {
 		GizmoStyleEditor gizmoStyle,
 		PresetEditor presetEditor,
 		LocaleManager locale
-	) : base("Ktisis Settings") {
+	) : base("Ktisis 设置") {
 		this._cfg = cfg;
 		this._context = context;
 		this._format = format;

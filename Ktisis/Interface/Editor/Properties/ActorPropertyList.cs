@@ -50,8 +50,8 @@ public class ActorPropertyList : ObjectPropertyList {
 			} is not ActorEntity actor
 		) return;
 
-		builder.AddHeader("Actor", () => this.DrawActorTab(actor), priority: 0);
-		builder.AddHeader("Gaze Control", () => this.DrawGazeTab(actor), priority: 1);
+		builder.AddHeader("角色", () => this.DrawActorTab(actor), priority: 0);
+		builder.AddHeader("视线控制", () => this.DrawGazeTab(actor), priority: 1);
 	}
 	
 	// Actor tab
@@ -74,16 +74,16 @@ public class ActorPropertyList : ObjectPropertyList {
 		if (Buttons.IconButton(FontAwesomeIcon.Edit))
 			this._ctx.Interface.OpenActorEditor(actor);
 		ImGui.SameLine(0, spacing);
-		ImGui.Text("Edit actor appearance");
+		ImGui.Text("编辑角色外观");
 		
 		ImGui.Spacing();
 		
 		// Import/export
 
-		if (ImGui.Button("Import"))
+		if (ImGui.Button("导入"))
 			this._ctx.Interface.OpenCharaImport(actor);
 		ImGui.SameLine(0, spacing);
-		if (ImGui.Button("Export"))
+		if (ImGui.Button("导出"))
 			this._ctx.Interface.OpenCharaExport(actor);
 	}
 	
@@ -118,7 +118,7 @@ public class ActorPropertyList : ObjectPropertyList {
 					IsLinked = !IsLinked;
 				}
 				ImGui.SameLine(0, spacing);
-				ImGui.Text(IsLinked ? "Linked" : "Unlinked");
+				ImGui.Text(IsLinked ? "已链接" : "未链接");
 				ImGui.Spacing();
 			}
 
@@ -176,7 +176,7 @@ public class ActorPropertyList : ObjectPropertyList {
 
 		// camera tracking - when pressed, toggle enabled and change gaze mode to KtisisFollowCam (or revert to Target mode)
 		using (ImRaii.PushColor(ImGuiCol.Button, ImGui.GetColorU32(ImGuiCol.ButtonActive), isTracking)) {
-			if (Buttons.IconButtonTooltip(FontAwesomeIcon.Eye, "Camera Tracking", Vector2.Zero)) {
+			if (Buttons.IconButtonTooltip(FontAwesomeIcon.Eye, "相机跟随", Vector2.Zero)) {
 				result = true;
 				enabled = true;
 				gaze.Mode = isTracking ? GazeMode.Target : GazeMode._KtisisFollowCam_;
@@ -188,7 +188,7 @@ public class ActorPropertyList : ObjectPropertyList {
 		// 	or, possible to create a dummy scene object (GazeTarget?) to hijack overlay gizmo?
 		using (ImRaii.Disabled()) {
 			using var __ = ImRaii.PushColor(ImGuiCol.Button, ImGui.GetColorU32(ImGuiCol.ButtonActive), isTracking);
-			if (Buttons.IconButtonTooltip(FontAwesomeIcon.LocationArrow, "Gizmo Tracking [TODO]", Vector2.Zero)) {}
+			if (Buttons.IconButtonTooltip(FontAwesomeIcon.LocationArrow, "Gizmo 跟随 [待实现]", Vector2.Zero)) {}
 		}
 
 		result |= GazeTables[type].DrawPosition(ref gaze.Pos, TransformTableFlags.UseAvailable);

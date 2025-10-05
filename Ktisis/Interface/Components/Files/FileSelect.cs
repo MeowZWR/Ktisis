@@ -35,7 +35,7 @@ public class FileSelect<T> where T : notnull {
 	// Draw UI
 
 	public void Draw() {
-		const string DefaultText = "Select a file to open..."; // TODO: Localize
+		const string DefaultText = "选择要打开的文件..."; // TODO: Localize
 		
 		var path = this.Selected?.Name ?? DefaultText;
 		ImGui.InputText("##FileSelectPath", ref path, 256, ImGuiInputTextFlags.ReadOnly);

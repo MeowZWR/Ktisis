@@ -144,7 +144,7 @@ public class GizmoStyleEditor {
 		
 		using var _ = ImRaii.PushId($"##StyleFloat_{label}");
 		using (var unused = ImRaii.Disabled(value.Equals(defaultValue))) {
-			if (Buttons.IconButtonTooltip(FontAwesomeIcon.Undo, "Reset to default"))
+			if (Buttons.IconButtonTooltip(FontAwesomeIcon.Undo, "重置为默认值"))
 				value = defaultValue;
 		}
 		
@@ -158,7 +158,7 @@ public class GizmoStyleEditor {
 
 		using var _ = ImRaii.PushId($"##StyleFloat_{label}");
 		using (var unused = ImRaii.Disabled(value.Equals(defaultValue))) {
-			if (Buttons.IconButtonTooltip(FontAwesomeIcon.Undo, "Reset to default"))
+			if (Buttons.IconButtonTooltip(FontAwesomeIcon.Undo, "重置为默认值"))
 				value = defaultValue;
 		}
 		

@@ -118,7 +118,7 @@ public class CameraWindow : KtisisWindow {
 
 		ImGui.SameLine();
 
-		var text = $"Orbiting: {target.Name.TextValue}";
+		var text = $"环绕目标：{target.Name.TextValue}";
 		if (isFixed)
 			ImGui.Text(text);
 		else

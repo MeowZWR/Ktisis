@@ -30,7 +30,7 @@ public class ActorWindow : EntityEditWindow<ActorEntity> {
 		CustomizeEditorTab custom,
 		EquipmentEditorTab equip,
 		AnimationEditorTab anim
-	) : base($"Actor Editor###{WindowId}", ctx) {
+	) : base($"角色编辑器###{WindowId}", ctx) {
 		this._custom = custom;
 		this._equip = equip;
 		this._anim = anim;
@@ -69,10 +69,10 @@ public class ActorWindow : EntityEditWindow<ActorEntity> {
 		this.UpdateTarget();
 		
 		using var _ = ImRaii.TabBar("##ActorEditTabs");
-		DrawTab("Appearance", this._custom.Draw);
-		DrawTab("Equipment", this._equip.Draw);
-		DrawTab("Animation", this._anim.Draw);
-		DrawTab("Misc", this.DrawMisc);
+		DrawTab("外观", this._custom.Draw);
+		DrawTab("装备", this._equip.Draw);
+		DrawTab("动作", this._anim.Draw);
+		DrawTab("高级", this.DrawMisc);
 	}
 
 	private static void DrawTab(string name, Action draw) {
@@ -86,13 +86,13 @@ public class ActorWindow : EntityEditWindow<ActorEntity> {
 		ImGui.Spacing();
 		
 		var modelId = (int)this._editCustom.GetModelId();
-		if (ImGui.InputInt("Model ID", ref modelId))
+		if (ImGui.InputInt("模型ID", ref modelId))
 			this._editCustom.SetModelId((uint)modelId);
 
 		var chara = (CharacterEx*)this.Target.Character;
 		if (chara != null) {
 			ImGui.Spacing();
-			ImGui.SliderFloat("Opacity", ref chara->Opacity, 0.0f, 1.0f);
+			ImGui.SliderFloat("透明度", ref chara->Opacity, 0.0f, 1.0f);
 		}
 		
 		ImGui.Spacing();
@@ -105,7 +105,7 @@ public class ActorWindow : EntityEditWindow<ActorEntity> {
 
 	private void DrawWetness() {
 		var isWetActive = this.Target.Appearance.Wetness != null;
-		if (ImGui.Checkbox("Wetness Override", ref isWetActive))
+		if (ImGui.Checkbox("湿润度覆盖", ref isWetActive))
 			this.ToggleWetness();
 
 		var wetness = this.GetWetness();
@@ -116,9 +116,9 @@ public class ActorWindow : EntityEditWindow<ActorEntity> {
 
 		var changed = false;
 		var values = (WetnessState)wetness;
-		changed |= ImGui.SliderFloat("Weather Wetness", ref values.WeatherWetness, 0.0f, 1.0f);
-		changed |= ImGui.SliderFloat("Swimming Wetness", ref values.SwimmingWetness, 0.0f, 1.0f);
-		changed |= ImGui.SliderFloat("Wetness Depth", ref values.WetnessDepth, 0.0f, 3.0f);
+		changed |= ImGui.SliderFloat("天气湿润度", ref values.WeatherWetness, 0.0f, 1.0f);
+		changed |= ImGui.SliderFloat("游泳湿润度", ref values.SwimmingWetness, 0.0f, 1.0f);
+		changed |= ImGui.SliderFloat("湿润深度", ref values.WetnessDepth, 0.0f, 3.0f);
 		if (changed) this.Target.Appearance.Wetness = values;
 	}
 
