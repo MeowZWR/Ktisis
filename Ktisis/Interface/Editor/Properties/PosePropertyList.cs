@@ -60,10 +60,8 @@ public class PosePropertyList : ObjectPropertyList {
 		if (actor is not ActorEntity) return;
 		ImGui.Spacing();
 		
-		if (ImGui.Button("导入"))
-			this._ctx.Interface.OpenPoseImport(actor);
 		ImGui.SameLine(0, spacing);
-		if (ImGui.Button("导出"))
+		if (ImGui.Button("导出姿势"))
 			this._ctx.Interface.OpenPoseExport(pose);
 		ImGui.Spacing();
 
