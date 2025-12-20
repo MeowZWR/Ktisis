@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Dalamud.Bindings.ImGui;
@@ -23,6 +24,7 @@ using Ktisis.Scene.Entities.World;
 using Ktisis.Scene.Modules;
 using Ktisis.Scene.Modules.Actors;
 using Ktisis.Interface.Components.Chara;
+using Ktisis.Scene.Modules.Lights;
 
 namespace Ktisis.Interface.Editor;
 
@@ -157,7 +159,10 @@ public class EditorInterface : IEditorInterface {
 
 	public void OpenOverworldActorList() => this._gui.CreatePopup<OverworldActorPopup>(this._ctx).Open();
 	
-	public void RefreshGposeActors() => this._ctx.Scene.GetModule<ActorModule>().RefreshGPoseActors();
+	public void RefreshSceneEntities() {
+		this._ctx.Scene.GetModule<ActorModule>().RefreshGPoseActors();
+		this._ctx.Scene.GetModule<LightModule>().RefreshLightEntities();
+	}
 
 	// Entity windows
 	
@@ -165,9 +170,14 @@ public class EditorInterface : IEditorInterface {
 	public void OpenSavePreset(ActorEntity entity) => this._gui.CreatePopup<PresetSaveModal>(entity).Open();
 	
 	public void OpenActorEditor(ActorEntity actor) {
-		if (!this._ctx.Config.Editor.UseLegacyWindowBehavior)
+		var opened = this.OpenEditor<ActorWindow, ActorEntity>(actor);
+		if (
+			opened
+			&& !this._ctx.Config.Editor.UseLegacyWindowBehavior
+			&& this._ctx.Selection.Count > 0
+			&& !this._ctx.Selection.IsActorSelected(actor)
+		)
 			actor.Select(SelectMode.Force);
-		this.OpenEditor<ActorWindow, ActorEntity>(actor);
 	}
 	
 	public void OpenLightEditor(LightEntity light) {
@@ -178,7 +188,7 @@ public class EditorInterface : IEditorInterface {
 		this.OpenObjectEditor(light);
 	}
 
-	public void OpenEditor<T, TA>(TA entity) where T : EntityEditWindow<TA> where TA : SceneEntity {
+	public bool OpenEditor<T, TA>(TA entity) where T : EntityEditWindow<TA> where TA : SceneEntity {
 		var editor = this._gui.GetOrCreate<T>(this._ctx);
 		editor.SetTarget(entity);
 
@@ -188,6 +198,7 @@ public class EditorInterface : IEditorInterface {
 			editor.Open();
 			ImGui.SetWindowFocus(editor.WindowName);
 		}
+		return editor.IsOpen;
 	}
     
 	public void OpenEditorFor(SceneEntity entity) {
@@ -222,6 +233,11 @@ public class EditorInterface : IEditorInterface {
 		var file = await this._ctx.Posing.SavePoseFile(pose);
 		this.ExportPoseFile(file);
 	}
+
+	public async Task OpenLightExport(LightEntity light) {
+		var file = await this._ctx.Scene.SaveLightFile(light);
+		this.ExportLightFile(file);
+	}
 	
 	// Import/export dialogs
 	
@@ -230,13 +246,22 @@ public class EditorInterface : IEditorInterface {
 		Extension = ".chara"
 	};
 
-	private readonly static FileDialogOptions PoseFileOptions = new() {
-		Filters = "姿势文件{.pose}",
+	private readonly static FileDialogOptions ExportPoseFileOptions = new() {
+		Filters = "姿势文件{.pose,.cmp}",
 		Extension = ".pose"
 	};
 
+	private readonly static FileDialogOptions LightFileOptions = new() {
+		Filters = "灯光文件{.ktlight}",
+		Extension = ".ktlight"
+  };
+  
+	private readonly static FileDialogOptions ImportPoseFileOptions = new() {
+		Filters = "姿势文件{.pose,.cmp}"
+	};
+
 	private readonly static FileDialogOptions McdfFileOptions = new() {
-		Filters = "MCDF 文件{.mcdf}",
+		Filters = "MCDF文件{.mcdf}",
 		Extension = ".mcdf"
 	};
 	
@@ -247,20 +272,32 @@ public class EditorInterface : IEditorInterface {
 		this._gui.FileDialogs.OpenFile<PoseFile>("打开姿势文件", (path, file) => {
 			file.ConvertLegacyBones();
 			handler.Invoke(path, file);
-		}, PoseFileOptions);
+		}, ImportPoseFileOptions);
 	}
 	
 	public void OpenMcdfFile(Action<string> handler) {
 		this._gui.FileDialogs.OpenFile("打开MCDF文件", handler, McdfFileOptions);
 	}
 
+	public void OpenLightFile(Action<string, LightFile> handler)
+		=> this._gui.FileDialogs.OpenFile("打开灯光文件", handler, LightFileOptions);
+
 	public void OpenReferenceImages(Action<string> handler) {
 		this._gui.FileDialogs.OpenImage("图片", handler);
 	}
 
-	public void ExportCharaFile(CharaFile file)
-		=> this._gui.FileDialogs.SaveFile("导出角色文件", file, CharaFileOptions);
+	public void ExportCharaFile(CharaFile file) {
+		var options = CharaFileOptions;
+		options.DefaultFileName = file.Nickname;
+		this._gui.FileDialogs.SaveFile("导出角色文件", file, options);
+	}
 	
 	public void ExportPoseFile(PoseFile file)
-		=> this._gui.FileDialogs.SaveFile("导出姿势文件", file, PoseFileOptions);
+		=> this._gui.FileDialogs.SaveFile("导出姿势文件", file, ExportPoseFileOptions);
+
+	public void ExportLightFile(LightFile file) {
+		var options = LightFileOptions;
+		options.DefaultFileName = file.Nickname;
+		this._gui.FileDialogs.SaveFile("导出灯光文件", file, options);
+	}
 }

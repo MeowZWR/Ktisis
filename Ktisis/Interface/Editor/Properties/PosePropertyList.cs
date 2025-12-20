@@ -63,6 +63,10 @@ public class PosePropertyList : ObjectPropertyList {
 		ImGui.SameLine(0, spacing);
 		if (ImGui.Button("导出姿势"))
 			this._ctx.Interface.OpenPoseExport(pose);
+		ImGui.SameLine(0, spacing);
+
+		if (ImGui.Button("Flip Pose"))
+			this._ctx.Posing.ApplyFlipPose(pose);
 		ImGui.Spacing();
 
 		if (ImGui.Button("设置为参考姿势"))

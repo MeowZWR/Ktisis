@@ -11,6 +11,7 @@
 	
 	"actions": {
 		"Select_None": "取消选择",
+		"Select_Sibling": "选择同级骨骼",
 		"Overlay_Toggle": "切换叠加层可见性",
 		"History_Undo": "撤销",
 		"History_Redo": "重做",
@@ -31,6 +32,7 @@
 		"Camera_Work_Down": "工作摄像机下移",
 		"Camera_Work_Fast": "工作摄像机高速模式",
 		"Camera_Work_Slow": "工作摄像机低速模式",
+		"Pose_FlipPose": "翻转姿势",
 		"Gizmo_MirrorRotation": "切换镜像与平行旋转模式"
 	},
 	
@@ -92,7 +94,8 @@
 				"disable": "骨骼操纵当前处于禁用状态。"
 			}
 		},
-		"refresh_actors": "刷新场景角色",
+		"create": "新建...",
+		"refresh_entities": "刷新场景实体",
 		"edit_mode.hint": "选择编辑模式",
 		"overlay.toggle": "切换屏幕叠加层"
 	},
@@ -108,7 +111,8 @@
 		},
 		"flags": {
 			"parallel": "并行变换",
-			"mirror": "镜像变换"
+			"inverse": "逆向变换",
+			"reflect": "镜像变换"
 		},
 		"sibling": {
 			"available": "多选兄弟骨骼：%bone%",
@@ -155,7 +159,28 @@
 	
 	"chara_edit": {
 		"title": "外观编辑器",
-		"hint": "编辑外观"
+		"hint": "编辑外观",
+		"animation": {
+			"controls": {
+				"animationSelect": "动画",
+				"idleSelect": "空闲姿势",
+				"play": "播放",
+				"reset": "重置",
+				"loop": "循环",
+				"playStart": "播放表情开始",
+				"weapon": "拔出武器",
+				"posLock": "冻结位置",
+				"enableSpeed": "启用速度控制",
+				"speedSlider": "播放速度",
+				"scrub": "拖拽播放"
+			},
+			"poseExpression": {
+				"title": "姿势表情",
+				"warning": "⚠ 姿态模式当前已启用！",
+				"brioWarning": "⚠ Brio当前已启用！当前的不兼容性阻止此功能正常工作 - 要加载姿势表情，请先禁用Brio。",
+				"header": "警告：这是一个实验性功能！它将覆盖任何当前的正面姿势，并可能变形耳朵或其他面部部位。但是，您仍然可以撤销任何做出的更改。"
+			}
+		}
 	},
 	
 	"camera_edit": {
@@ -198,14 +223,14 @@
 	"config": {
 		"title": "Ktisis 设置",
 		"categories": {
-			"title": "类别",
-			"allow_nsfw": "显示NSFW类别",
-			"hint_nsfw": "需要IVCS或任何自定义骨架。",
+			"title": "个性化",
+			"allow_nsfw": "显示NSFW骨骼",
+			"hint_nsfw": "需要IVCS、YAS或任何自定义骨架。",
 			"show_all_viera_ears": "显示未使用的耳朵骨骼",
 			"hint_viera_ears": "显示所有维埃拉族耳朵的骨骼，包括其他耳朵选项的骨骼。",
-			"show_friendly_bone_names": "显示准确的骨骼名称",
+			"show_friendly_bone_names": "显示友好的骨骼名称",
 			"hint_friendly_bones": "在可用的情况下为骨骼使用本地化名称，而不是SE默认名称。",
-			"header": "类别：",
+			"header": "骨骼类别：",
 			"editor": {
 				"color_header": "颜色：",
 				"group_color": "组颜色",
@@ -218,7 +243,7 @@
 			"title": "变换器",
 			"flip": "面向相机翻转轴",
 			"raySnap": "按住Shift键以射线捕捉物体",
-			"header": "样式：",
+			"header": "变换器样式：",
 			"editor": {
 				"general": {
 					"title": "常规",
@@ -263,6 +288,7 @@
 		},
 		"overlay": {
 			"title": "叠加层",
+			"header": "配置骨骼叠加层：",
 			"lines": {
 				"draw": "在骨骼上绘制线",
 				"draw_gizmo": "使用变换器时在骨骼上绘制线",
@@ -279,17 +305,25 @@
 			"draw_title": "为参考图像绘制标题。"
 		},
 		"workspace": {
-			"title": "工作区",
-			"init": "进入集体动作时打开",
+			"title": "通用",
+			"header": "工作区设置",
+			"init": "进入GPose时打开工作区",
 			"toggleOpenWindows": "UI按钮切换窗口开关",
 			"initPosLock": "进入GPose时冻结角色位置",
 			"editOnSelect": "选中时切换对象编辑器",
 			"closeOnDeselect": "未选择任何对象时关闭对象编辑器",
 			"incognitoPlayerNames": "隐身模式",
 			"hintIncognito": "在角色列表和拍照窗口中隐藏所有玩家名字",
+			"hintPosLock": "开发中：如果启用，角色可能会吸附到玩家角色的GPose原点而不是GPose外的原位置！",
+			"hintInit": "如果禁用，您可以在GPose中输入/ktisis来打开Ktisis工作区",
+			"windowHeader": "窗口行为选项",
+			"legacyHeader": "传统界面选项 [将在v0.3版本中弃用]",
 			"legacyWindows": "使用传统窗口行为",
+			"legacyWindowHint": "控制窗口是否以及如何仅引用目标角色",
 			"legacyPoseTabs": "使用传统姿势视图标签页",
+			"legacyPoseHint": "为场景中的每个角色在姿势视图顶部绘制一个标签页",
 			"legacyLightEditor": "使用传统灯光编辑器",
+			"legacyLightHint": "允许打开灯光编辑器窗口，现已移至对象编辑器",
 			"confirmExit": "退出姿势模式时需按住Shift键确认",
 			"workcam": {
 				"speed": "工作相机速度",
@@ -302,9 +336,19 @@
 		"input": {
 			"title": "输入",
 			"enable": "启用按键绑定",
-			"help": "点击按键绑定以修改它们。右键点击以清除。",
-			"blockLeft": "左键点击时禁用更改目标",
-			"blockRight": "右键点击时禁用更改目标"
+			"help": "点击按键绑定以修改它们。右键点击以清除。必须启用按键绑定才能编辑。",
+			"blockLeft": "左键点击时禁用GPose更改目标",
+			"blockRight": "右键点击时禁用GPose更改目标",
+			"scrollAllow": "为变换滑块启用滚轮输入",
+			"scrollMod": "需要按住ALT键才能使用滚轮控制变换滑块",
+			"cameras": {
+				"title": "相机",
+				"header": "相机控制："
+			},
+			"gizmo": {
+				"title": "变换器",
+				"header": "变换器动作："
+			}
 		},
 		"autosave": {
 			"title": "自动保存",
@@ -319,7 +363,7 @@
 		},
 		"presets": {
 			"title": "预设",
-			"description": "在下方查看和编辑您定义的预设。",
+			"description": "在下方查看和编辑您定义的骨骼可见性预设。",
 			"defaults": "右键点击任何预设将其标记为默认。默认预设将初始为任何GPose角色启用。",
 			"delete_tooltip": "按住SHIFT以删除",
 			"delete": "删除",
@@ -340,6 +384,56 @@
 				"description": "在此下载模板图像：",
 				"button": "GitHub",
 				"link": "https://github.com/ktisis-tools/Ktisis/tree/v0.3/main/Ktisis/Data/Images/Templates"
+			}
+		},
+		"offsets": {
+			"title": "Bone Offsets",
+			"description": "Import and edit Visual Bone Offsets",
+			"help": "By setting a translation for a bone below, its clickable node on Ktisis' overlay will be offset by those values.",
+			"ui": {
+				"copy_all": "Copy All to Clipboard",
+				"load_all": "Load All from Clipboard",
+				"load_all_warning": "Warning: This will replace ALL your current offsets.\nHold CTRL+Shift to confirm.",
+				"add_bone": "Add offset",
+				"load_legacy": "Load Legacy Offsets",
+				"copy_bone": "Copy offset values",
+				"load_bone": "Paste offset values",
+				"clear_bone": "Shift+click to clear bone offset"
+			},
+			"race_sex": {
+				"101": "Midlander Male",
+				"201": "Midlander Female",
+				"301": "Highlander Male",
+				"401": "Highlander Female",
+				"501": "Elezen Male",
+				"601": "Elezen Female",
+				"701": "Miqote Male",
+				"801": "Miqote Female",
+				"901": "Roegadyn Male",
+				"1001": "Roegadyn Female",
+				"1101": "Lalafell Male",
+				"1201": "Lalafell Female",
+				"1301": "Au Ra Male",
+				"1401": "Au Ra Female",
+				"1501": "Hrothgar Male",
+				"1601": "Hrothgar Female",
+				"1701": "Viera Male",
+				"1801": "Viera Female"
+			}
+		},
+		"about": {
+			"title": "About",
+			"header": "About Ktisis",
+			"readme": "Ktisis is a robust posing tool for creating screenshots within FFXIV's GPose mode which allows you to pose characters by clicking on bones and moving them in any way you want, bringing additional features such as animation control and character editing. Our primary aim is to make posing more accessible for all.",
+			"gitLinkout": {
+				"description": "You can submit any issues or help our development on GitHub:",
+				"button": "GitHub",
+				"link": "https://github.com/ktisis-tools/Ktisis/"
+			},
+			"discordLinkout": {
+				"description": "Join our Discord community for support, screenshot sharing, changelogs, and more:",
+				"button": "Discord",
+				"link": "https://discord.com/invite/kUG3W8B8Ny/"
 			}
 		}
 	},
@@ -642,7 +736,7 @@
 	},
 	
 	"lightType": {
-		"Directional": "定向光",
+		"Directional": "太阳光（定向光）",
 		"PointLight": "点光源",
 		"SpotLight": "聚光灯",
 		"AreaLight": "区域光"

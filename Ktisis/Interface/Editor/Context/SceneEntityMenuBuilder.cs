@@ -4,6 +4,7 @@ using System.Runtime.InteropServices.JavaScript;
 using Dalamud.Bindings.ImGui;
 using GLib.Popups.Context;
 
+using Ktisis.Data.Files;
 using Ktisis.Common.Extensions;
 using Ktisis.Editor.Context.Types;
 using Ktisis.Editor.Selection;
@@ -71,6 +72,8 @@ public class SceneEntityMenuBuilder {
 			menu.Separator();
 			if (this._entity is ActorEntity actor)
 				menu.Action("复制", () => this.DuplicateActor(actor));
+			if (this._entity is LightEntity light)
+				menu.Action("复制", () => this.DuplicateLight(light));
 			menu.Action("删除", () => deletable.Delete());
 		}
 	}
@@ -169,9 +172,21 @@ public class SceneEntityMenuBuilder {
 
 	private void BuildLightMenu(ContextMenuBuilder menu, LightEntity light) {
 		menu.Separator()
+			.Action($"{(light.IsHidden ? "显示" : "隐藏")} 灯光", light.ToggleHidden)
+			.Separator()
 			.Action("编辑光照", this.OpenEditor)
 			.Separator()
-			.Action("导入预设（待实现）", () => { })
-			.Action("导出预设（待实现）", () => { });
+			.Action("导入灯光文件", () => this.Ui.OpenLightFile((path, file) => this.ImportLight(light, file)))
+			.Action("导出灯光文件", () => this.Ui.OpenLightExport(light));
+	}
+
+	private async void ImportLight(LightEntity light, LightFile file) {
+		await this._ctx.Scene.ApplyLightFile(light, file);
+	}
+
+	private async void DuplicateLight(LightEntity light) {
+		var file = await this._ctx.Scene.SaveLightFile(light);
+		var newLight = await this._ctx.Scene.Factory.CreateLight().Spawn();
+		this.ImportLight(newLight, file);
 	}
 }

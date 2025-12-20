@@ -1,6 +1,7 @@
 using Dalamud.Interface;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Interface.Utility;
 
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 
@@ -220,7 +221,7 @@ public class CameraWindow : KtisisWindow {
 		var distanceHint = this._ctx.Locale.Translate("camera_edit.sliders.distance");
 		using (ImRaii.Disabled(IsWork))
 			this.DrawSliderAngle("##CameraRotate", FontAwesomeIcon.CameraRotate, ref ptr->Rotation, -180.0f, 180.0f, 0.5f, rotateHint);
-		this.DrawSliderAngle("##CameraZoom", FontAwesomeIcon.VectorSquare, ref ptr->Zoom, -40.0f, 100.0f, 0.5f, zoomHint);
+		this.DrawSliderAngle("##CameraZoom", FontAwesomeIcon.Binoculars, ref ptr->Zoom, -40.0f, 100.0f, 0.5f, zoomHint);
 		this.DrawSliderFloat("##CameraDistance", FontAwesomeIcon.Moon, ref ptr->Distance, ptr->DistanceMin, ptr->DistanceMax, 0.05f, distanceHint);
 		if (camera.IsOrthographic) {
 			var orthoHint = this._ctx.Locale.Translate("camera_edit.sliders.ortho_zoom");
@@ -258,7 +259,7 @@ public class CameraWindow : KtisisWindow {
 
 	private void DrawIconAlign(FontAwesomeIcon icon, out float spacing, string hint = "") {
 		var padding = ImGui.GetStyle().CellPadding.X;
-		var iconSpace = (UiBuilder.IconFont.FontSize - Icons.CalcIconSize(icon).X) / 2;
+		var iconSpace = ((UiBuilder.DefaultFontSizePx * ImGuiHelpers.GlobalScale) - Icons.CalcIconSize(icon).X) / 2;
 
 		ImGui.SetCursorPosX(ImGui.GetCursorPosX() + padding + iconSpace);
 		Icons.DrawIcon(icon);

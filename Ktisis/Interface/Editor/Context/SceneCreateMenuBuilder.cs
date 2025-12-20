@@ -43,9 +43,18 @@ public class SceneCreateMenuBuilder {
 		sub.Action("点光源", () => SpawnLight(LightType.PointLight))
 			.Action("聚光灯", () => SpawnLight(LightType.SpotLight))
 			.Action("面光源", () => SpawnLight(LightType.AreaLight))
-			.Action("太阳光", () => SpawnLight(LightType.Directional));
+			.Action("太阳光（定向）", () => SpawnLight(LightType.Directional))
+			.Action("来自文件... (.ktlight)", () => this.ImportLightFromFile());
 		
 		void SpawnLight(LightType type) => this.Factory.CreateLight(type).Spawn();
+	}
+
+	private async void ImportLightFromFile() {
+		this._ctx.Interface.OpenLightFile(async (path, file) => {
+			var name = Path.GetFileNameWithoutExtension(path).Truncate(32);
+			var newLight = await this.Factory.CreateLight().Spawn();
+			await this._ctx.Scene.ApplyLightFile(newLight, file);
+		});
 	}
 
 	private void BuildUtilityGroup(ContextMenuBuilder sub) {

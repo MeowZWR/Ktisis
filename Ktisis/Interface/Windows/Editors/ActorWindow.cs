@@ -42,6 +42,12 @@ public class ActorWindow : EntityEditWindow<ActorEntity> {
 		this._npcs = npcs;
 		this._npcs.OnSelected += this.OnNpcSelect;
 	}
+
+	public override void PreOpenCheck() {
+		if (this.Context.IsValid) return;
+		Ktisis.Log.Verbose("Context for actor window is stale, closing...");
+		this.Close();
+	}
 	
 	// Target
 
@@ -55,6 +61,7 @@ public class ActorWindow : EntityEditWindow<ActorEntity> {
 		this._editCustom = this._custom.Editor = this.Manager.GetCustomizeEditor(target);
 		this._equip.Editor = this.Manager.GetEquipmentEditor(target);
 		this._anim.Editor = this.Animation.GetAnimationEditor(target);
+		this._anim.ClearPoseExpression();
 	}
 
 	// Draw tabs
@@ -76,10 +83,10 @@ public class ActorWindow : EntityEditWindow<ActorEntity> {
 		this.UpdateTarget();
 		
 		using var _ = ImRaii.TabBar("##ActorEditTabs");
+		DrawTab("动画", this._anim.Draw);
 		DrawTab("外观", this._custom.Draw);
 		DrawTab("装备", this._equip.Draw);
-		DrawTab("动作", this._anim.Draw);
-		DrawTab("高级", this.DrawMisc);
+		DrawTab("其它", this.DrawMisc);
 	}
 
 	private static void DrawTab(string name, Action draw) {
