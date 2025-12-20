@@ -1,6 +1,6 @@
 [
 	{
-		"Author": "Chirp",
+		"Author": "Chirp, Cazzar, Bwuny and contributors",
 		"Name": "Ktisis",
 		"InternalName": "Ktisis",
 		"Description": "集体动作姿势编辑工具。初次使用记得设置→Language→选择简体中文。",
@@ -8,8 +8,8 @@
 		"TestingAssemblyVersion": "0.3.11",
 		"RepoUrl": "https://github.com/MeowZWR/Ktisis",
 		"ApplicableVersion": "any",
-		"DalamudApiLevel": 13,
-		"TestingDalamudApiLevel": 13,
+		"DalamudApiLevel": 14,
+		"TestingDalamudApiLevel": 14,
 		"Tags": [
 			"gpose",
 			"posing",
