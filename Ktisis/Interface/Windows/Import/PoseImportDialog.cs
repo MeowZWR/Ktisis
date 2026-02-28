@@ -123,7 +123,7 @@ public class PoseImportDialog : EntityEditWindow<ActorEntity> {
 				file.ImportPoseModes ^= PoseMode.Face;
 		}
 
-		ImGui.Checkbox("Exclude ear bones", ref file.ExcludePoseEarBones);
+		ImGui.Checkbox("排除耳朵骨骼", ref file.ExcludePoseEarBones);
 
 		var hasPosition = file.ImportPoseTransforms.HasFlag(PoseTransforms.Position);
 		using (ImRaii.Disabled(!isSelectBones || !file.ImportPoseSelectedBones || !hasPosition))

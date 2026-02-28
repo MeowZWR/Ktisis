@@ -45,7 +45,7 @@ public class ActorWindow : EntityEditWindow<ActorEntity> {
 
 	public override void PreOpenCheck() {
 		if (this.Context.IsValid) return;
-		Ktisis.Log.Verbose("Context for actor window is stale, closing...");
+		Ktisis.Log.Verbose("角色编辑器的上下文已失效，正在关闭...");
 		this.Close();
 	}
 	
@@ -54,7 +54,7 @@ public class ActorWindow : EntityEditWindow<ActorEntity> {
 	private ICustomizeEditor _editCustom = null!;
 
 	public override void SetTarget(ActorEntity target) {
-		this.WindowName = $"Actor Editor - {target.Name}###{WindowId}";
+		this.WindowName = $"角色编辑器 - {target.Name}###{WindowId}";
 		
 		base.SetTarget(target);
 		

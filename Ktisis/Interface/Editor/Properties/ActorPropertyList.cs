@@ -281,7 +281,7 @@ public class ActorPropertyList : ObjectPropertyList {
 
 		ImGui.AlignTextToFramePadding();
 		var hasTarget = targetId != 0;
-		var label = hasTarget ? $"Targeting: {(targetEntity != null ? targetEntity.Name : $"Unknown ({targetId})")}" : "No Target";
+		var label = hasTarget ? $"目标: {(targetEntity != null ? targetEntity.Name : $"未知 ({targetId})")}" : "无目标";
 		using (ImRaii.Disabled(!hasTarget)) {
 			ImGui.SameLine(0, ImGui.GetStyle().ItemInnerSpacing.X);
 			ImGui.Text(label);
