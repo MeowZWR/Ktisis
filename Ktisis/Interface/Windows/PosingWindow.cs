@@ -41,7 +41,7 @@ public class PosingWindow : KtisisWindow {
 		LocaleManager locale,
 		GPoseService gpose
 	) : base(
-		"姿势视图"
+		"姿势视图###KtisisPoseView"
 	) {
 		this._ctx = ctx;
 		this._locale = locale;
@@ -76,18 +76,26 @@ public class PosingWindow : KtisisWindow {
 			return;
 		}
 
-		var selected = (ActorEntity?)this._ctx.Selection.GetSelected()
-			.FirstOrDefault(entity => entity is ActorEntity);
-
-		if (selected != null && this._target != selected)
-			this._target = selected;
+		if (this.UpdateTarget())
+			this.WindowName = $"Pose View - {this._target!.Name}###KtisisPoseView";
 
 		if (this._target is not { IsValid: true }) {
 			ImGui.Text("选择一个角色来开始编辑其姿势。");
 			return;
 		}
-		
+
 		this.DrawWindow(this._target);
+	}
+
+	private bool UpdateTarget() {
+		var selected = (ActorEntity?)this._ctx.Selection.GetSelected()
+			.FirstOrDefault(entity => entity is ActorEntity);
+
+		if (selected == null || this._target == selected)
+			return false;
+
+		this._target = selected;
+		return true;
 	}
 
 	private IEnumerable<ActorEntity> GetValidTargets() {
@@ -194,9 +202,8 @@ public class PosingWindow : KtisisWindow {
 					
 					ImGui.Spacing();
 					
-					var hasTail = false;
-					var isBunny = false;
-					target.Pose?.CheckFeatures(out hasTail, out isBunny);
+					var hasTail = target.Pose?.HasTail() ?? false;
+					var isBunny = target.Pose?.HasBunnyEars() ?? false;
 					
 					var template = this._render.BuildTemplate(target);
 					

@@ -2,9 +2,9 @@ using System;
 using System.Numerics;
 
 using Dalamud.Bindings.ImGui;
+using Dalamud.Bindings.ImGuizmo;
 using Dalamud.Interface.Utility.Raii;
 
-using Ktisis.ImGuizmo;
 using Ktisis.Interface.Overlay;
 
 namespace Ktisis.Interface.Components.Transforms;
@@ -18,13 +18,14 @@ public class Gizmo2D {
 
 	public Gizmo2D(IGizmo gizmo) {
 		this.Gizmo = gizmo;
-		this.Gizmo.Operation = Operation.ROTATE;
+		this.Gizmo.Operation = ImGuizmoOperation.Rotate;
 		this.Gizmo.ScaleFactor = ScaleFactor;
+		this.Gizmo.AllowAxisFlip = false;
 	}
 	
 	// Gizmo state
 
-	public Mode Mode {
+	public ImGuizmoMode Mode {
 		get => this.Gizmo.Mode;
 		set => this.Gizmo.Mode = value;
 	}
@@ -53,6 +54,8 @@ public class Gizmo2D {
 
 		var cursorPos = ImGui.GetCursorScreenPos();
 		var innerSize = ImGui.GetContentRegionAvail();
+		ImGui.SetNextWindowPos(ImGui.GetMainViewport().Pos);
+		ImGui.SetNextWindowSize(ImGui.GetMainViewport().Size);
 		
 		ImGui.Begin("##Gizmo2D", ImGuiWindowFlags.ChildWindow | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDecoration);
 		
@@ -66,6 +69,7 @@ public class Gizmo2D {
 	}
 	
 	private static void DrawGizmoCircle(Vector2 pos, Vector2 size, float width) {
+		// background circle drawn behind the gizmo
 		ImGui.GetWindowDrawList().AddCircleFilled(pos + size / 2, (width * ScaleFactor) / 2.05f, 0xCF202020);
 	}
 

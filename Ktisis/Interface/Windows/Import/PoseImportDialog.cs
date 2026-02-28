@@ -1,7 +1,11 @@
 using System.Linq;
 
-using Dalamud.Interface.Utility.Raii;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Interface;
+using Dalamud.Interface.Colors;
+using Dalamud.Interface.Utility.Raii;
+
+using GLib.Widgets;
 
 using Ktisis.Data.Config;
 using Ktisis.Data.Files;
@@ -88,13 +92,24 @@ public class PoseImportDialog : EntityEditWindow<ActorEntity> {
 		
 		ImGui.SameLine();
 
+		// if operating on a .cmp file, force disable position and scale as they're always dummy
+		var isCmp = this._select.Selected != null && this._select.Selected.Path.EndsWith(".cmp");
+
 		var position = trans.HasFlag(PoseTransforms.Position);
+		var scale = trans.HasFlag(PoseTransforms.Scale);
+		using var _ = ImRaii.Disabled(isCmp);
+		if (isCmp) {
+			position = false;
+			file.ImportPoseTransforms &= ~PoseTransforms.Position;
+			scale = false;
+			file.ImportPoseTransforms &= ~PoseTransforms.Scale;
+		}
+
 		if (ImGui.Checkbox("位置##PoseImportPos", ref position))
 			file.ImportPoseTransforms ^= PoseTransforms.Position;
 		
 		ImGui.SameLine();
 
-		var scale = trans.HasFlag(PoseTransforms.Scale);
 		if (ImGui.Checkbox("缩放##PoseImportScale", ref scale))
 			file.ImportPoseTransforms ^= PoseTransforms.Scale;
 	}
@@ -111,7 +126,17 @@ public class PoseImportDialog : EntityEditWindow<ActorEntity> {
 				file.ImportPoseSelectedBones ^= true;
 		}
 
-		if (!isSelectiveImport) {
+		if (isSelectiveImport) {
+			using (ImRaii.PushIndent()) {
+				ImGui.Checkbox("包含子级", ref file.SelectedBonesIncludeDescendants);
+
+				var hasPosition = file.ImportPoseTransforms.HasFlag(PoseTransforms.Position);
+				using (ImRaii.Disabled(!hasPosition))
+					ImGui.Checkbox("锚定分组位置", ref file.AnchorPoseSelectedBones);
+			}
+		}
+
+		if (!isSelectiveImport || file.SelectedBonesIncludeDescendants) {
 			var body = modes.HasFlag(PoseMode.Body);
 			if (ImGui.Checkbox("身体##PoseImportBody", ref body))
 				file.ImportPoseModes ^= PoseMode.Body;
@@ -121,13 +146,15 @@ public class PoseImportDialog : EntityEditWindow<ActorEntity> {
 			var face = modes.HasFlag(PoseMode.Face);
 			if (ImGui.Checkbox("面部##PoseImportFace", ref face))
 				file.ImportPoseModes ^= PoseMode.Face;
+			if (face && this._select.IsFileOpened && this.Target.Pose?.HasDTFace() != _select.Selected?.File.HasDTFace()) {
+				ImGui.SameLine();
+				Icons.DrawIcon(FontAwesomeIcon.ExclamationTriangle, ColorHelpers.RgbaVector4ToUint(ImGuiColors.DalamudYellow));
+				if (ImGui.IsItemHovered())
+					ImGui.SetTooltip("面部将不会从所选姿势文件导入，因为与所选角色不兼容。");
+			}
 		}
 
 		ImGui.Checkbox("排除耳朵骨骼", ref file.ExcludePoseEarBones);
-
-		var hasPosition = file.ImportPoseTransforms.HasFlag(PoseTransforms.Position);
-		using (ImRaii.Disabled(!isSelectBones || !file.ImportPoseSelectedBones || !hasPosition))
-			ImGui.Checkbox("锚定分组位置", ref file.AnchorPoseSelectedBones);
 	}
 	
 	// Apply pose
@@ -141,8 +168,9 @@ public class PoseImportDialog : EntityEditWindow<ActorEntity> {
 
 		var cfg = this._ctx.Config.File;
 		var selectedBones = isSelectBones && cfg.ImportPoseSelectedBones;
+		var includeDescendants = cfg.SelectedBonesIncludeDescendants;
 		var anchorGroups = cfg.AnchorPoseSelectedBones;
 		var excludeEars = cfg.ExcludePoseEarBones;
-		this._ctx.Posing.ApplyPoseFile(pose, file, cfg.ImportPoseModes, cfg.ImportPoseTransforms, selectedBones, anchorGroups, excludeEars);
+		this._ctx.Posing.ApplyPoseFile(pose, file, cfg.ImportPoseModes, cfg.ImportPoseTransforms, selectedBones, includeDescendants, anchorGroups, excludeEars);
 	}
 }

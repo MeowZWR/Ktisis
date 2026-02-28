@@ -47,6 +47,12 @@ public class SceneEntityMenuBuilder {
 			menu.Action("选择", () => this._entity.Select(SelectMode.Multiple));
 		else
 			menu.Action("取消选择", this._entity.Unselect);
+		if (this._entity.Children.Any())
+			menu.Action("选择层级", () => {
+				foreach (var entity in this._entity.Children.Where(entity => !entity.IsSelected))
+					entity.Select(SelectMode.Multiple);
+				if (!this._entity.IsSelected) this._entity.Select(SelectMode.Multiple);
+			});
 
 		if (this._entity is IVisibility vis)
 			menu.Action("切换显示", () => vis.Toggle());

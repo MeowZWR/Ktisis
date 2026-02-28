@@ -33,6 +33,7 @@ public class SceneCreateMenuBuilder {
 	private void BuildActorGroup(ContextMenuBuilder sub) {
 		sub.Action("新建角色", () => this.Factory.CreateActor().Spawn())
 			.Action("从文件导入角色", this.ImportCharaFromFile)
+			.Action("从Mcdf导入角色", this.ImportCharaFromMcdf)
 			.Action("添加场景角色", this._ctx.Interface.OpenOverworldActorList);
 	}
 	
@@ -68,6 +69,16 @@ public class SceneCreateMenuBuilder {
 			var name = Path.GetFileNameWithoutExtension(path).Truncate(32);
 			this.Factory.CreateActor()
 				.WithAppearance(file)
+				.SetName(name)
+				.Spawn();
+		});
+	}
+	
+	private void ImportCharaFromMcdf() {
+		this._ctx.Interface.OpenMcdfFile((path) => {
+			var name = Path.GetFileNameWithoutExtension(path).Truncate(32);
+			this.Factory.CreateActor()
+				.WithMcdf(path)
 				.SetName(name)
 				.Spawn();
 		});

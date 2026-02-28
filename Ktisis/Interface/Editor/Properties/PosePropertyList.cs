@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 
@@ -27,7 +28,19 @@ public class PosePropertyList : ObjectPropertyList {
 	private readonly IEditorContext _ctx;
 	private readonly GuiManager _gui;
 	private readonly LocaleManager _locale;
-	
+	private int _partialIndex;
+
+	private string LabelForPartial(EntityPose pose, int partialIndex) {
+		if (partialIndex == -1) return "Reset All Skeletons";
+		var name = pose.GetPartialInfo(partialIndex)?.Name ?? "N/A";
+		return partialIndex switch {
+			0 => "Reset Body",
+			1 => "Reset Face",
+			2 => "Reset Hair",
+			_ => $"Reset Skeleton #{partialIndex} ({name})"
+		};
+	}
+
 	public PosePropertyList(
 		IEditorContext ctx,
 		GuiManager gui,
@@ -36,6 +49,7 @@ public class PosePropertyList : ObjectPropertyList {
 		this._gui = gui;
 		this._ctx = ctx;
 		this._locale = locale;
+		this._partialIndex = -1;
 	}
 
 	private const string IkCfgPopup = "##IkCfgPopup";
@@ -59,19 +73,14 @@ public class PosePropertyList : ObjectPropertyList {
 		var actor = pose.Parent;
 		if (actor is not ActorEntity) return;
 		ImGui.Spacing();
-		
-		ImGui.SameLine(0, spacing);
+
 		if (ImGui.Button("导出姿势"))
-			this._ctx.Interface.OpenPoseExport(pose);
+			await this._ctx.Interface.OpenPoseExport(pose);
 		ImGui.SameLine(0, spacing);
 
 		if (ImGui.Button("翻转姿势"))
-			this._ctx.Posing.ApplyFlipPose(pose);
+			await this._ctx.Posing.ApplyFlipPose(pose);
 		ImGui.Spacing();
-
-		if (ImGui.Button("设置为参考姿势"))
-			await this._ctx.Posing.ApplyReferencePose(pose);
-		ImGui.SameLine(0, spacing);
 
 		if (ImGui.Button("暂存姿势"))
 			await this._ctx.Posing.StashPose(pose);
@@ -87,6 +96,33 @@ public class PosePropertyList : ObjectPropertyList {
 		if (ImGui.IsItemHovered()) {
 			using (ImRaii.Tooltip())
 				ImGui.Text(_hint);
+		}
+
+		ImGui.Spacing();
+		ImGui.Separator();
+		ImGui.Spacing();
+		ImGui.Text("参考姿势...");
+		var combo = ImGui.BeginCombo("##PartialSelectList", this.LabelForPartial(pose, this._partialIndex));
+		if (combo) {
+			// add select-all as the first element
+			if (ImGui.Selectable(this.LabelForPartial(pose, -1), this._partialIndex == -1))
+				this._partialIndex = -1;
+
+			// add element for each partial index on pose
+			foreach (var partial in pose.GetPartialIndices()) {
+				var label = this.LabelForPartial(pose, partial);
+				label = label.Length <= 60 ? label : label[..60] + "..."; // truncate to ellipsis in case of really long filepaths
+				if (ImGui.Selectable(label, this._partialIndex == partial))
+					this._partialIndex = partial;
+			}
+			ImGui.EndCombo();
+		}
+		ImGui.SameLine(0, spacing);
+		if (ImGui.Button("Reset Pose")) {
+			if (this._partialIndex == -1)
+				await this._ctx.Posing.ApplyReferencePose(pose);
+			else
+				await this._ctx.Posing.ApplyPartialReferencePose(pose, this._partialIndex);
 		}
 
 		ImGui.Spacing();
