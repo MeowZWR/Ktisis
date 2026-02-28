@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Dalamud.Plugin.Services;
+
 using Lumina.Excel.Sheets;
 
 namespace Ktisis.Helpers {
@@ -15,12 +17,12 @@ namespace Ktisis.Helpers {
 			{"%Time%", () => DateTime.Now.ToString("hh-mm-ss")},
 			{"%PlayerName%", () => {
 				if (Ktisis.Configuration.DisplayCharName)
-					return Services.ClientState.LocalPlayer?.Name.ToString() ?? "Unknown";
+					return Services.ObjectTable.LocalPlayer?.Name.ToString() ?? "Unknown";
 
 				return "Player";
 			}},
-			{"%CurrentWorld%", () => Services.ClientState.LocalPlayer?.CurrentWorld.Value.Name.ToString() ?? "Unknown"},
-			{"%HomeWorld%", () => Services.ClientState.LocalPlayer?.HomeWorld.Value.Name.ToString() ?? "Unknown" },
+			{"%CurrentWorld%", () => Services.ObjectTable.LocalPlayer?.CurrentWorld.Value.Name.ToString() ?? "Unknown"},
+			{"%HomeWorld%", () => Services.ObjectTable.LocalPlayer?.HomeWorld.Value.Name.ToString() ?? "Unknown" },
 			{"%Zone%", () => Services.DataManager.GetExcelSheet<TerritoryType>()?.GetRow(Services.ClientState.TerritoryType).PlaceName.Value.Name.ToString() ?? "Unknown"},
 		};
 		
