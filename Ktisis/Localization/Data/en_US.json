@@ -32,10 +32,17 @@
 		"Camera_Work_Right": "工作摄像机右移",
 		"Camera_Work_Up": "工作摄像机上移",
 		"Camera_Work_Down": "工作摄像机下移",
-		"Camera_Work_Fast": "工作摄像机高速模式",
-		"Camera_Work_Slow": "工作摄像机低速模式",
+		"Camera_Work_Fast": "工作摄像机高速移动修饰键",
+		"Camera_Work_Slow": "工作摄像机低速移动修饰键",
 		"Pose_FlipPose": "翻转姿势",
-		"Gizmo_MirrorRotation": "切换镜像与平行旋转模式"
+		"Gizmo_MirrorRotation": "循环旋转模式（镜像/平行）",
+		"Toolbar_ToggleWorkspace": "切换到工作区窗口",
+		"Toolbar_ToggleObject": "切换到对象编辑器",
+		"Toolbar_ToggleActor": "切换到角色编辑器",
+		"Toolbar_TogglePose": "切换到姿势视图",
+		"Toolbar_ToggleEnv": "切换到环境编辑器",
+		"Toolbar_ToggleCamera": "切换到相机编辑器",
+		"Toolbar_ToggleConfig": "切换到设置窗口"
 	},
 	
 	"actors": {
@@ -53,7 +60,7 @@
 	
 	"transform": {
 		"position": "位置",
-		"rotation": "旋转",
+		"rotation": "旋转\n按住 Shift 切换屏幕轨道。",
 		"scale": "缩放"
 	},
 	
@@ -190,7 +197,7 @@
 		"toggles": {
 			"collide": "碰撞",
 			"delimit": "解限",
-			"ortho": "正交试图"
+			"ortho": "正交视图"
 		},
 		"sliders": {
 			"rotation": "相机旋转",
@@ -244,10 +251,11 @@
 		"gizmo": {
 			"title": "操作柄",
 			"flip": "面向相机翻转轴",
-			"raySnap": "Hold Shift to ray snap objects",
-			"rayHint": "When moving a translation gizmo for XYZ, holding Shift will snap the object to world surfaces",
-			"holdSnap": "Hold Control for gizmo snapping (+Shift for precision)",
-			"hintHoldSnap": "Snaps gizmo values to nearest numbers while dragging the mouse",
+			"raySnap": "按住 Shift 进行射线吸附",
+			"rayHint": "移动 XYZ 平移操作柄时，按住 Shift 可将对象吸附到世界表面",
+			"holdSnap": "按住 Ctrl 吸附操作柄数值（再加 Shift 提高精度）",
+			"hintHoldSnap": "拖拽鼠标时将操作柄数值吸附到最近的刻度",
+			"2d_scale": "2D 操作柄缩放",
 			"header": "操作柄样式：",
 			"editor": {
 				"general": {
@@ -312,24 +320,25 @@
 		"workspace": {
 			"title": "通用",
 			"header": "工作区设置",
-			"init": "进入GPose时打开工作区",
-			"toggleOpenWindows": "UI按钮切换窗口开关",
-			"initPosLock": "进入GPose时冻结角色位置",
-			"editOnSelect": "选中时切换对象编辑器",
-			"closeOnDeselect": "未选择任何对象时关闭对象编辑器",
+			"init": "进入 GPose 时打开工作区",
+			"toggleOpenWindows": "UI 按钮切换窗口开关",
+			"toolbar": "使用 Ktisis 工具栏",
+			"hintToolbar": "实验功能：将 Ktisis 各编辑器整合到单一窗口的替代界面。\n该选项仍在积极开发中，欢迎反馈！",
+			"editOnSelect": "从工作区选中对象时打开对象编辑器",
+			"closeOnDeselect": "未选中任何对象时关闭对象编辑器",
 			"incognitoPlayerNames": "隐身模式",
-			"hintIncognito": "在角色列表和拍照窗口中隐藏所有玩家名字",
-			"hintPosLock": "开发中：如果启用，角色可能会吸附到玩家角色的GPose原点而不是GPose外的原位置！",
-			"hintInit": "如果禁用，您可以在GPose中输入/ktisis来打开Ktisis工作区",
-			"windowHeader": "窗口行为选项",
-			"legacyHeader": "传统界面选项 [将在v0.3版本中弃用]",
-			"legacyWindows": "使用传统窗口行为",
-			"legacyWindowHint": "控制窗口是否以及如何仅引用目标角色",
-			"legacyPoseTabs": "使用传统姿势视图标签页",
-			"legacyPoseHint": "为场景中的每个角色在姿势视图顶部绘制一个标签页",
-			"legacyLightEditor": "使用传统灯光编辑器",
-			"legacyLightHint": "允许打开灯光编辑器窗口，现已移至对象编辑器",
-			"confirmExit": "退出姿势模式时需按住Shift键确认",
+			"hintIncognito": "在角色列表与集体拍照窗口中隐藏所有玩家名称",
+			"hintInit": "若关闭，可在 GPose 中输入 /ktisis 打开 Ktisis 工作区",
+			"windowHeader": "窗口行为",
+			"legacyHeader": "传统界面选项（v0.3 发布后将弃用）",
+			"legacyWindows": "优先使用传统窗口行为",
+			"legacyWindowHint": "控制各窗口是否以及如何仅针对当前目标角色",
+			"legacyPoseTabs": "姿势视图：通过标签页切换角色（而非工作区）",
+			"legacyLightEditor": "优先使用传统灯光编辑器",
+			"legacyLightHint": "允许单独打开灯光编辑器窗口（已迁至对象编辑器）",
+			"confirmExit": "退出姿势模式时需按住 Shift 确认",
+			"AutoResizeObjectEditor": "打开新下拉菜单时自动扩展对象编辑器高度",
+			"hint_AutoResizeObj": "开启后将无法手动调整编辑器高度，仍可调整宽度",
 			"workcam": {
 				"speed": "工作相机速度",
 				"fastMulti": "工作相机快速倍率",
@@ -339,7 +348,7 @@
 			},
 			"customLocations": {
 				"header": "自定义文件位置",
-				"description": "管理文件对话框的自定义文件夹位置。",
+				"description": "管理文件对话框中的自定义文件夹快捷位置。",
 				"columnName": "名称",
 				"columnPath": "路径",
 				"browse": "浏览",
@@ -347,6 +356,10 @@
 				"add": "添加新位置",
 				"moving": "移动 %name%",
 				"selectFolder": "选择文件夹"
+			},
+			"defaultLocation": {
+				"remove": "取消将此文件夹设为默认",
+				"add": "将此文件夹设为使用文件浏览器时的默认打开位置"
 			}
 		},
 		"input": {
@@ -362,8 +375,12 @@
 				"header": "相机控制："
 			},
 			"gizmo": {
-				"title": "变换器",
-				"header": "变换器动作："
+				"title": "操作柄",
+				"header": "操作柄快捷键："
+			},
+			"toolbar": {
+				"title": "工具栏",
+				"header": "工具栏快捷键："
 			}
 		},
 		"autosave": {
@@ -677,7 +694,64 @@
 		"j_f_dmiken_l": "左鼻梁",
 		"j_f_dmiken_r": "右鼻梁",
 
-		"j_ex_met_vb": "面甲"
+		"j_ex_met_vb": "面甲",
+
+		"iv_asi_oya_a_l": "IVCS 左脚大趾 A",
+		"iv_asi_oya_b_l": "IVCS 左脚大趾 B",
+		"iv_asi_hito_a_l": "IVCS 左脚食趾 A",
+		"iv_asi_hito_b_l": "IVCS 左脚食趾 B",
+		"iv_asi_naka_a_l": "IVCS 左脚趾中节 A",
+		"iv_asi_naka_b_l": "IVCS 左脚趾中节 B",
+		"iv_asi_kusu_a_l": "IVCS 左脚无名趾 A",
+		"iv_asi_kusu_b_l": "IVCS 左脚无名趾 B",
+		"iv_asi_ko_a_l": "IVCS 左脚小趾 A",
+		"iv_asi_ko_b_l": "IVCS 左脚小趾 B",
+
+		"iv_asi_oya_a_r": "IVCS 右脚大趾 A",
+		"iv_asi_oya_b_r": "IVCS 右脚大趾 B",
+		"iv_asi_hito_a_r": "IVCS 右脚食趾 A",
+		"iv_asi_hito_b_r": "IVCS 右脚食趾 B",
+		"iv_asi_naka_a_r": "IVCS 右脚趾中节 A",
+		"iv_asi_naka_b_r": "IVCS 右脚趾中节 B",
+		"iv_asi_kusu_a_r": "IVCS 右脚无名趾 A",
+		"iv_asi_kusu_b_r": "IVCS 右脚无名趾 B",
+		"iv_asi_ko_a_r": "IVCS 右脚小趾 A",
+		"iv_asi_ko_b_r": "IVCS 右脚小趾 B",
+
+		"iv_hito_c_l": "IVCS 左手食指 C",
+		"iv_naka_c_l": "IVCS 左手中指 C",
+		"iv_kusu_c_l": "IVCS 左手无名指 C",
+		"iv_ko_c_l": "IVCS 左手小指 C",
+		"iv_hito_c_r": "IVCS 右手食指 C",
+		"iv_naka_c_r": "IVCS 右手中指 C",
+		"iv_kusu_c_r": "IVCS 右手无名指 C",
+		"iv_ko_c_r": "IVCS 右手小指 C",
+
+		"iv_nitoukin_l": "IVCS 左肱二头肌",
+		"iv_nitoukin_r": "IVCS 右肱二头肌",
+
+		"iv_c_mune_l": "IVCS 左胸",
+		"iv_c_mune_r": "IVCS 右胸",
+
+		"iv_kougan_l": "IVCS 左阴囊",
+		"iv_kougan_r": "IVCS 右阴囊",
+		"iv_ochinko_a": "IVCS 阴茎 A",
+		"iv_ochinko_b": "IVCS 阴茎 B",
+		"iv_ochinko_c": "IVCS 阴茎 C",
+		"iv_ochinko_d": "IVCS 阴茎 D",
+		"iv_ochinko_e": "IVCS 阴茎 E",
+		"iv_ochinko_f": "IVCS 阴茎 F",
+
+		"iv_kuritto": "IVCS 阴蒂",
+		"iv_inshin_l": "IVCS 左阴唇",
+		"iv_inshin_r": "IVCS 右阴唇",
+		"iv_omanko": "IVCS 阴道",
+
+		"iv_koumon": "IVCS 肛门",
+		"iv_koumon_l": "IVCS 肛门左侧",
+		"iv_koumon_r": "IVCS 肛门右侧",
+		"iv_shiri_l": "IVCS 左臀",
+		"iv_shiri_r": "IVCS 右臀"
 	},
 
 	"boneCategory": {

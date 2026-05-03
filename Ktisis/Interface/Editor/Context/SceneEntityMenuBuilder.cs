@@ -54,9 +54,6 @@ public class SceneEntityMenuBuilder {
 				if (!this._entity.IsSelected) this._entity.Select(SelectMode.Multiple);
 			});
 
-		if (this._entity is IVisibility vis)
-			menu.Action("切换显示", () => vis.Toggle());
-
 		if (this._entity.Root is ActorEntity actorEntity)
 			menu.SubMenu("预设...", sub => {
 				foreach (var (name, isEnabled) in actorEntity.GetPresets()) {
@@ -107,7 +104,6 @@ public class SceneEntityMenuBuilder {
 	private unsafe void BuildActorMenu(ContextMenuBuilder menu, ActorEntity actor) {
 		menu.Separator()
 			.Action("设为目标", actor.Actor.SetGPoseTarget)
-			.Action($"{(actor.IsHidden ? "显示" : "隐藏")} 角色", actor.ToggleHidden)
 			.Separator()
 			.Action("编辑外观", this.OpenEditor)
 			.Group(sub => this.BuildActorIpcMenu(sub, actor))
@@ -116,7 +112,7 @@ public class SceneEntityMenuBuilder {
 				var builder = sub.Action("角色文件 (.chara)", () => this.Ui.OpenCharaImport(actor))
 					.Action("NPC", () => this.Ui.OpenCharaImport(actor, true))
 					.Action("姿势文件 (.pose)", () => this.Ui.OpenPoseImport(actor));
-				
+
 				if (this._ctx.Plugin.Ipc.IsAnyMcdfActive && actor.GetHuman() != null) {
 					builder.Action("Mare数据 (.mcdf)", () => {
 						this.Ui.OpenMcdfFile(path => this.ImportMcdf(actor, path));
@@ -131,8 +127,10 @@ public class SceneEntityMenuBuilder {
 
 	private unsafe void BuildActorIpcMenu(ContextMenuBuilder menu, ActorEntity actor) {
 		menu.SubMenu("IPC 外观", sub => {
-			if (this._ctx.Plugin.Ipc.IsPenumbraActive)
+			if (this._ctx.Plugin.Ipc.IsPenumbraActive) {
 				sub.Action("Penumbra: 分配合集", () => this.Ui.OpenAssignCollection(actor));
+				sub.Action("Penumbra: 隐形皮肤", () => this._ctx.Characters.Mcdf.SetInvisibleSkin(actor));
+			}
 			if (this._ctx.Plugin.Ipc.IsGlamourerActive)
 				sub.Action("Glamourer: 应用设计", () => this.Ui.OpenApplyDesign(actor));
 			if (this._ctx.Plugin.Ipc.IsCustomizeActive)
@@ -149,9 +147,14 @@ public class SceneEntityMenuBuilder {
 	private async void DuplicateActor(ActorEntity actor) {
 		// pack actor into a temp charafile to apply to new actor after creation
 		var file = await this._ctx.Characters.SaveCharaFile(actor);
-		this._ctx.Scene.Factory.CreateActor()
+		var dupe = await this._ctx.Scene.Factory.CreateActor()
 			.WithAppearance(file)
 			.Spawn();
+
+		// copy glamourer state if applicable
+		if (!this._ctx.Plugin.Ipc.IsGlamourerActive) return;
+		var ipc = this._ctx.Plugin.Ipc.GetGlamourerIpc();
+		ipc.CopyState(actor.Actor.ObjectIndex, dupe.Actor.ObjectIndex);
 	}
 	
 	// Poses
@@ -178,9 +181,7 @@ public class SceneEntityMenuBuilder {
 
 	private void BuildLightMenu(ContextMenuBuilder menu, LightEntity light) {
 		menu.Separator()
-			.Action($"{(light.IsHidden ? "显示" : "隐藏")} 灯光", light.ToggleHidden)
-			.Separator()
-			.Action("编辑光照", this.OpenEditor)
+			.Action("编辑灯光", this.OpenEditor)
 			.Separator()
 			.Action("导入灯光文件", () => this.Ui.OpenLightFile((path, file) => this.ImportLight(light, file)))
 			.Action("导出灯光文件", () => this.Ui.OpenLightExport(light));
