@@ -111,7 +111,7 @@ public class ActorPropertyList : ObjectPropertyList {
 	// Advanced tab
 
 	private void DrawAdvancedTab(ActorEntity actor) {
-		ImGui.Text("Gaze Control");
+		ImGui.Text("视线控制");
 		this.DrawGazeTab(actor);
 
 		if (!TryGetEntityPose(actor, out var pose) || pose.IkController.GroupCount == 0)
@@ -121,7 +121,7 @@ public class ActorPropertyList : ObjectPropertyList {
 		ImGui.Separator();
 		ImGui.Spacing();
 
-		ImGui.Text("Inverse Kinematics");
+		ImGui.Text("逆向动力学");
 		this.DrawConstraintsTab(pose);
 	}
 
@@ -245,7 +245,7 @@ public class ActorPropertyList : ObjectPropertyList {
 		// 	- draw a translate gizmo at the targeted gaze position
 		using (ImRaii.Disabled(anyGizmo && !isGizmo)) {
 			using (ImRaii.PushColor(ImGuiCol.Button, ImGui.GetColorU32(ImGuiCol.ButtonActive), isGizmo)) {
-				if (Buttons.IconButtonTooltip(FontAwesomeIcon.LocationArrow, "Gizmo 跟随", Vector2.Zero)) {
+				if (Buttons.IconButtonTooltip(FontAwesomeIcon.LocationArrow, "操作柄跟随", Vector2.Zero)) {
 					// if this wasnt enabled, set the gaze target to a friendly lerp
 					if (!enabled)
 						gaze.Pos = GetCameraLerpFor(actor);
@@ -284,7 +284,7 @@ public class ActorPropertyList : ObjectPropertyList {
 		// 2. show current target if one is set
 		// todo: can you unset targets?
 		// button
-		if (Buttons.IconButtonTooltip(FontAwesomeIcon.Users, "Select target actor"))
+		if (Buttons.IconButtonTooltip(FontAwesomeIcon.Users, "选择目标角色"))
 			this._gui.CreatePopup<ActorGazeTargetPopup>(this._ctx, actor).Open();
 
 		// label
@@ -337,13 +337,13 @@ public class ActorPropertyList : ObjectPropertyList {
 
 			using (ImRaii.PushColor(ImGuiCol.Button, ImGui.GetColorU32(ImGuiCol.ButtonActive), node.IsSelected)) {
 				var canSelect = !node.IsSelected || this._ctx.Selection.Count > 1;
-				if (Buttons.IconButtonTooltip(FontAwesomeIcon.HandPointer, "Select", Vector2.Zero) && canSelect)
+				if (Buttons.IconButtonTooltip(FontAwesomeIcon.HandPointer, "选择", Vector2.Zero) && canSelect)
 					node.Select(GuiHelpers.GetSelectMode());
 			}
 
 			ImGui.SameLine(0, spacing);
 
-			if (Buttons.IconButtonTooltip(FontAwesomeIcon.EllipsisH, "Configure", Vector2.Zero))
+			if (Buttons.IconButtonTooltip(FontAwesomeIcon.EllipsisH, "配置", Vector2.Zero))
 				ImGui.OpenPopup(IkCfgPopup);
 
 			if (!ImGui.IsPopupOpen(IkCfgPopup)) continue;
@@ -355,7 +355,7 @@ public class ActorPropertyList : ObjectPropertyList {
 
 	private void DrawIkConfig(IIkNode ik) {
 		var isEnabled = ik.IsEnabled;
-		if (ImGui.Checkbox("Enabled", ref isEnabled)) {
+		if (ImGui.Checkbox("启用", ref isEnabled)) {
 			if (isEnabled)
 				ik.Enable();
 			else

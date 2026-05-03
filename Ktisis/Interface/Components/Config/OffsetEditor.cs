@@ -150,7 +150,7 @@ public class OffsetEditor {
 		}
 
 		ImGui.SameLine(0, spacing);
-		ImGui.Text($"Selected Bone: {boneDisplay}");
+		ImGui.Text($"已选骨骼: {boneDisplay}");
 	}
 
 	private void DrawSkeletonCombo() {

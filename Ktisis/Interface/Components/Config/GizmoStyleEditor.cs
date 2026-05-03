@@ -34,7 +34,7 @@ public class GizmoStyleEditor {
 
 		using var frame = ImRaii.Child("##CfgStyleFrame", ImGui.GetContentRegionAvail()- (this._cfg.File.Editor.UseToolbar?new Vector2(0, 2): Vector2.Zero), true);
 		using var _ = ImRaii.Disabled(); // TODO: undisable
-		ImGui.TextWrapped("Gizmo Styling is currently disabled in this build, pending a Dalamud update!");
+		ImGui.TextWrapped("操作柄样式在当前版本中禁用，等待 Dalamud 更新！");
 		if (ImGui.CollapsingHeader(this._locale.Translate("config.gizmo.editor.general.title"))) {
 			DrawStyleColor(this._locale.Translate("config.gizmo.editor.general.dir_x"), ref style.ColorDirectionX, defaults.ColorDirectionX);
 			DrawStyleColor(this._locale.Translate("config.gizmo.editor.general.dir_y"), ref style.ColorDirectionY, defaults.ColorDirectionY);
