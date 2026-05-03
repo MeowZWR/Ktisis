@@ -7,6 +7,7 @@ using Dalamud.Game.ClientState.Objects.Types;
 using FFXIVClientStructs.FFXIV.Client.Graphics.Render;
 using FFXIVClientStructs.Havok.Animation.Playback.Control.Default;
 using FFXIVClientStructs.Havok.Animation.Rig;
+using FFXIVClientStructs.Havok.Common.Base.Math.QsTransform;
 
 using Ktisis.Structs;
 using Ktisis.Structs.Actor;
@@ -18,7 +19,7 @@ namespace Ktisis.Interop.Hooks {
 		internal delegate ulong SetBoneModelSpaceFfxivDelegate(nint partialSkeleton, ushort boneId, nint transform, bool enableSecondary, bool enablePropagate);
 		internal static Hook<SetBoneModelSpaceFfxivDelegate> SetBoneModelSpaceFfxivHook = null!;
 
-		internal delegate nint CalculateBoneModelSpaceDelegate(ref hkaPose pose, int boneIdx);
+		internal unsafe delegate hkQsTransformf* CalculateBoneModelSpaceDelegate(hkaPose* pose, int boneIdx);
 		internal static Hook<CalculateBoneModelSpaceDelegate> CalculateBoneModelSpaceHook = null!;
 
 		internal unsafe delegate void SyncModelSpaceDelegate(hkaPose* pose);
@@ -126,12 +127,12 @@ namespace Ktisis.Interop.Hooks {
 			return boneId;
 		}
 
-		private static unsafe nint CalculateBoneModelSpaceDetour(ref hkaPose pose, int boneIdx) {
+		private static unsafe hkQsTransformf* CalculateBoneModelSpaceDetour(hkaPose* pose, int boneIdx) {
 			if (AnamPosingEnabled)
-				return CalculateBoneModelSpaceHook.Original(ref pose, boneIdx);
+				return CalculateBoneModelSpaceHook.Original(pose, boneIdx);
 
 			// This is expected to return the hkQsTransform at the given index in the pose's ModelSpace transform array.
-			return (nint)(pose.ModelPose.Data + boneIdx);
+			return pose->ModelPose.Data + boneIdx;
 		}
 
 		private static unsafe void SyncModelSpaceDetour(hkaPose* pose) {
@@ -228,7 +229,7 @@ namespace Ktisis.Interop.Hooks {
 		}
 
 		private static unsafe void SyncBone(hkaPose* bonesPose, int index) {
-			CalculateBoneModelSpaceHook.Original(ref *bonesPose, index);
+			CalculateBoneModelSpaceHook.Original(bonesPose, index);
 		}
 
 		public static unsafe bool IsGamePlaybackRunning(IGameObject? gPoseTarget) {
